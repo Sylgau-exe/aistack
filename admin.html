@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI Sovereign Stack — Admin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<script>
+window.onerror=function(m){ try{ var b=document.getElementById("errbar"); if(!b){ b=document.createElement("div"); b.id="errbar"; b.style.cssText="position:fixed;left:16px;right:16px;bottom:16px;z-index:999;background:#3a1c1c;color:#F3EDE2;border:1px solid #D8474B;border-radius:12px;padding:10px 14px;font:13px sans-serif"; document.body.appendChild(b);} b.textContent="Something went wrong: "+m; }catch(x){} };
+window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.reason.message)||ev.reason)); };
+</script>
+<style>
+  :root{--ink:#0B1826;--ink-2:#12283C;--line:#2B4C69;--ivory:#F3EDE2;--muted:#9FB3C4;--dim:#6B8194;--gold:#E3A63B;--gold-2:#F5C96B;--teal-2:#8BD9D0;
+    --display:"Fraunces",Georgia,serif;--body:"IBM Plex Sans",Arial,sans-serif;--mono:"IBM Plex Mono",Menlo,monospace}
+  body{margin:0;background:var(--ink);color:var(--ivory);font-family:var(--body);font-size:14px;padding:24px 16px 40px}
+  .wrap{max-width:1100px;margin:0 auto}
+  h1{font-family:var(--display);font-size:28px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px}
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+  input{height:38px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ivory);padding:0 14px;font:14px var(--body);outline:none;min-width:240px}
+  input:focus{border-color:var(--gold-2)}
+  button{height:38px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ivory);padding:0 16px;font:600 13px var(--body);cursor:pointer}
+  button.primary{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 18px}
+  .stats div{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px}
+  .stats b{display:block;font:500 24px var(--mono);color:var(--gold-2)} .stats small{color:var(--muted)}
+  .tblwrap{overflow-x:auto;border:1px solid rgba(255,255,255,.08);border-radius:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:820px}
+  th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.2)}
+  td{padding:9px 12px;border-bottom:1px solid rgba(43,76,105,.5);vertical-align:top}
+  td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+  .msg{color:var(--muted);padding:14px 0}
+  .pill{font:600 10px var(--body);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--teal-2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AI Sovereign Stack — visitors</h1>
+  <p class="sub">Everyone who registered on the page, most recent first. The key is the ADMIN_KEY you set in Vercel.</p>
+  <div class="bar">
+    <input id="key" type="password" placeholder="Admin key" autocomplete="off">
+    <button class="primary" id="load" type="button">Load</button>
+    <button id="csv" type="button" disabled>Download CSV</button>
+    <button id="refresh" type="button" disabled>Refresh</button>
+    <input id="q" type="search" placeholder="Filter by name, email, organization" disabled style="margin-left:auto">
+  </div>
+  <div class="stats" id="stats" hidden></div>
+  <div class="tblwrap" id="tblwrap" hidden><table><thead><tr>
+    <th>Name</th><th>Email</th><th>Organization</th><th>Lang</th><th>Consent</th><th style="text-align:right">Visits</th><th>First seen</th><th>Last seen</th><th>Came from</th>
+  </tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="msg" id="msg">Enter your admin key to load the list.</div>
+</div>
+<script>
+let DATA=[]; let KEY="";
+try{ KEY=sessionStorage.getItem("ss-admin")||""; if(KEY) document.getElementById("key").value=KEY; }catch(e){}
+const $=(id)=>document.getElementById(id);
+const fmt=(d)=>d?new Date(d).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}):"";
+async function load(){
+  KEY=$("key").value.trim(); if(!KEY){ $("msg").textContent="Enter your admin key."; return; }
+  $("msg").textContent="Loading…";
+  try{
+    const r=await fetch("/api/admin",{headers:{"x-admin-key":KEY}}); const j=await r.json();
+    if(!j.ok){ $("msg").textContent=r.status===401?"Wrong key.":(j.error||"Error"); return; }
+    try{ sessionStorage.setItem("ss-admin",KEY); }catch(e){}
+    DATA=j.visitors; $("stats").hidden=false; $("tblwrap").hidden=false; $("csv").disabled=$("refresh").disabled=$("q").disabled=false;
+    $("stats").innerHTML=`<div><b>${j.totals.visitors}</b><small>registered</small></div><div><b>${j.totals.visits}</b><small>total visits</small></div><div><b>${j.totals.new_7d}</b><small>new in 7 days</small></div><div><b>${DATA.filter(v=>v.lang==="fr").length}</b><small>reading in French</small></div>`;
+    render();
+  }catch(e){ $("msg").textContent="Could not reach the server: "+e.message; }
+}
+function render(){
+  const q=$("q").value.trim().toLowerCase();
+  const rows=DATA.filter(v=>!q||[v.name,v.email,v.organization].join(" ").toLowerCase().includes(q));
+  const esc=(s)=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  $("rows").innerHTML=rows.map(v=>`<tr><td>${esc(v.name)}</td><td><a href="mailto:${esc(v.email)}" style="color:var(--gold-2)">${esc(v.email)}</a></td><td>${esc(v.organization)}</td><td><span class="pill">${esc(v.lang)}</span></td><td>${v.consent?"yes":"no"}</td><td class="num">${v.visits}</td><td>${fmt(v.created_at)}</td><td>${fmt(v.last_seen)}</td><td style="color:var(--dim);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(v.referrer)}</td></tr>`).join("");
+  $("msg").textContent=rows.length?`${rows.length} of ${DATA.length}`:"No visitors match.";
+}
+$("load").onclick=load; $("refresh").onclick=load; $("q").oninput=render;
+$("key").addEventListener("keydown",e=>{ if(e.key==="Enter") load(); });
+$("csv").onclick=()=>{ window.location.href="/api/admin?format=csv&key="+encodeURIComponent(KEY); };
+if(KEY) load();
+</script>
+</body>
+</html>

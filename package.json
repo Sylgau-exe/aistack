@@ -1,0 +1,9 @@
+{
+  "name": "ai-sovereign-stack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Sovereign Stack — interactive map with visitor registration (Vercel + Neon)",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}

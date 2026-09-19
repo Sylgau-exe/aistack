@@ -10,7 +10,24 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="og.png">
 <meta name="twitter:card" content="summary_large_image">
-<style>[hidden]{display:none!important}</style>
+<style>[hidden]{display:none!important}  /* ---------- registration gate ---------- */
+  .gate{position:fixed;inset:0;z-index:100;background:rgba(5,12,20,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px}
+  .gate[hidden]{display:none}
+  .gcard{width:min(520px,100%);box-sizing:border-box;border-radius:22px;background:linear-gradient(165deg,#1B3D5A,#102539);border:1px solid rgba(227,166,59,.55);box-shadow:0 40px 100px rgba(0,0,0,.6);padding:26px 28px 22px;animation:qaIn .5s var(--ease) both}
+  .gcard .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  .gcard h2{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.05;margin:0 0 8px;text-wrap:balance}
+  .gcard p{margin:0 0 16px;color:var(--muted);font-size:14px;max-width:60ch}
+  .gcard label{display:block;font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:0 0 6px}
+  .gcard input[type=text],.gcard input[type=email]{width:100%;box-sizing:border-box;height:42px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ivory);padding:0 14px;font:15px var(--body);outline:none;margin-bottom:12px}
+  .gcard input:focus{border-color:var(--gold-2)}
+  .gcard .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .gcard .consent{display:flex;gap:10px;align-items:flex-start;font:400 12.5px/1.4 var(--body);letter-spacing:0;text-transform:none;color:var(--muted);margin:2px 0 14px}
+  .gcard .consent input{margin-top:3px}
+  .gcard .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .gcard .err{color:#F5A3A3;font-size:13px;margin-left:auto}
+  .gcard .lang{margin-left:auto}
+  @media (max-width:520px){ .gcard .row{grid-template-columns:1fr} .gcard{padding:20px 18px 18px} }
+</style>
 <script>
 window.onerror=function(m){ try{ var b=document.getElementById("errbar"); if(!b){ b=document.createElement("div"); b.id="errbar"; b.style.cssText="position:fixed;left:16px;right:16px;bottom:16px;z-index:999;background:#3a1c1c;color:#F3EDE2;border:1px solid #D8474B;border-radius:12px;padding:10px 14px;font:13px sans-serif"; document.body.appendChild(b);} b.textContent="Something went wrong on this page: "+m; }catch(x){} };
 window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.reason.message)||ev.reason)); };
@@ -199,6 +216,27 @@ window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.r
   @media (prefers-reduced-motion:reduce){ .world,.stage,.cell,.pill,.caption,.pop{transition:none;animation:none} .cell.enter,.pillwrap.enter,.base.enter,.caption .cbody,.dcontent{animation:none} }
 </style>
 
+<div class="gate" id="gate" hidden>
+  <form class="gcard" id="gform" onsubmit="return submitGate(event)">
+    <p class="eyebrow" id="g_eyebrow"></p>
+    <h2 id="g_title"></h2>
+    <p id="g_sub"></p>
+    <div class="row">
+      <div><label for="g_name" id="g_lname"></label><input type="text" id="g_name" name="name" autocomplete="name" required minlength="2"></div>
+      <div><label for="g_email" id="g_lemail"></label><input type="email" id="g_email" name="email" autocomplete="email" required></div>
+    </div>
+    <label for="g_org" id="g_lorg"></label><input type="text" id="g_org" name="organization" autocomplete="organization">
+    <label class="consent"><input type="checkbox" id="g_consent" checked><span id="g_consent_t"></span></label>
+    <div class="actions">
+      <button class="tourbtn" type="submit" id="g_btn"></button>
+      <span class="err" id="g_err"></span>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="glang-en" aria-pressed="true" onclick="setLang('en')">EN</button>
+        <button type="button" id="glang-fr" aria-pressed="false" onclick="setLang('fr')">FR</button>
+      </div>
+    </div>
+  </form>
+</div>
 <div class="spot" id="spot"></div>
 <div class="app">
   <header>
@@ -467,6 +505,37 @@ function renderCredit(){
 }
 const _sl=setLang; setLang=function(l){ _sl(l); renderCredit(); };
 setLang(LANG); fit();
+// ---------- registration gate ----------
+const GATE_UI={
+ en:{eyebrow:"Before you explore",title:"Tell me who is reading",sub:"This is a draft I am putting up for review. Leave your name and email so I can follow up on your comments and send you the revised version. Nothing else is done with it.",name:"Name",email:"Email",org:"Organization (optional)",consent:"You may email me about this project and its follow-ups.",btn:"Enter the stack",err_name:"Please enter your name.",err_email:"Please enter a valid email.",err_net:"Could not save right now. Try again."},
+ fr:{eyebrow:"Avant d'explorer",title:"Dites-moi qui lit",sub:"C'est un brouillon que je soumets à révision. Laissez votre nom et votre courriel pour que je puisse donner suite à vos commentaires et vous envoyer la version révisée. Rien d'autre n'en est fait.",name:"Nom",email:"Courriel",org:"Organisation (facultatif)",consent:"Vous pouvez m'écrire au sujet de ce projet et de ses suites.",btn:"Entrer dans la pile",err_name:"Veuillez entrer votre nom.",err_email:"Veuillez entrer un courriel valide.",err_net:"Impossible d'enregistrer pour l'instant. Réessayez."}
+};
+function gateText(){ const G=GATE_UI[LANG]; for(const [id,k] of [["g_eyebrow","eyebrow"],["g_title","title"],["g_sub","sub"],["g_lname","name"],["g_lemail","email"],["g_lorg","org"],["g_consent_t","consent"],["g_btn","btn"]]){ const el=document.getElementById(id); if(el) el.textContent=G[k]; }
+  document.getElementById("glang-en")?.setAttribute("aria-pressed",LANG==="en"); document.getElementById("glang-fr")?.setAttribute("aria-pressed",LANG==="fr"); }
+const _setLang=setLang; setLang=function(l){ _setLang(l); gateText(); };
+async function initGate(){
+  gateText();
+  let token=null; try{ token=localStorage.getItem("ss-token"); }catch(e){}
+  if(token){
+    try{ const r=await fetch("/api/visit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,lang:LANG})}); const j=await r.json(); if(j.ok) return; }catch(e){}
+    try{ localStorage.removeItem("ss-token"); }catch(e){}
+  }
+  document.getElementById("gate").hidden=false; setTimeout(()=>document.getElementById("g_name").focus(),400);
+}
+async function submitGate(e){
+  e.preventDefault(); const G=GATE_UI[LANG]; const err=document.getElementById("g_err"); err.textContent="";
+  const name=document.getElementById("g_name").value.trim(), email=document.getElementById("g_email").value.trim(), organization=document.getElementById("g_org").value.trim(), consent=document.getElementById("g_consent").checked;
+  if(name.length<2){ err.textContent=G.err_name; return false; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ err.textContent=G.err_email; return false; }
+  const btn=document.getElementById("g_btn"); btn.disabled=true;
+  try{ const r=await fetch("/api/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email,organization,consent,lang:LANG})}); const j=await r.json();
+    if(!j.ok) throw new Error(j.error||"x");
+    try{ localStorage.setItem("ss-token",j.token); }catch(e){}
+    document.getElementById("gate").hidden=true;
+  }catch(ex){ err.textContent=G.err_net; } finally{ btn.disabled=false; }
+  return false;
+}
+initGate();
 </script>
 
 </body>

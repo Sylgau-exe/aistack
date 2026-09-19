@@ -1,23 +1,27 @@
 # AI Sovereign Stack
 
 Where Canada can be sovereign in the AI stack — alone, and as an EU associate member.
-An interactive map: click a layer to fly in, click any verdict for the reasoning, guided tour, Q&A, English and French.
+Interactive map by **Sylvain Gauthier, with Claude (Anthropic)**. Draft for review — share with attribution.
 
-**Author:** Sylvain Gauthier, with Claude (Anthropic). Draft for review — share with attribution.
+## What is in the repo
 
-## Publish
+- `index.html` — the interactive page, gated by a name + email popup
+- `admin.html` — visitor list, stats, CSV export (served at `/admin`)
+- `api/register.js`, `api/visit.js`, `api/admin.js`, `api/_db.js` — Vercel serverless functions on Neon PostgreSQL
+- `og.png` — social preview image
+- `package.json`, `vercel.json`
 
-Static site, no build step. Two options:
+## Vercel setup
 
-- **GitHub Pages:** Settings → Pages → Source: *Deploy from a branch* → `main` / root. The site appears at `https://<user>.github.io/aistack/`.
-- **Vercel:** Import the repo, framework *Other*, no build command, output directory `.` (root). Deploy.
+1. Environment variables (Settings → Environment Variables, Production + Preview):
+   - `DATABASE_URL` — the Neon connection string (the Neon integration sets this automatically)
+   - `ADMIN_KEY` — a secret of your choice; this is what you type at `/admin`
+2. Redeploy after adding variables. No SQL to run: tables are created on the first request.
+3. Open `/` → register once → the page remembers you on that browser.
+4. Open `/admin` → enter `ADMIN_KEY` → visitor list; *Download CSV* for the mailing list.
 
-## Files
+## Edit the content
 
-- `index.html` — the whole interactive page (all text, both languages, in the `LAYERS`, `BASE`, `QA`, `TOUR` and `UI` objects)
-- `og.png` — social preview image (the static chart)
-
-## Edit
-
-Each text field is `B("English","Français")`. A verdict is `{c, v, tm}`: colour (`ok | warn | part | bad`), label key, timing (`now | prog | none | gated`).
-Author links live in the `AUTHOR` object near the top of the script.
+All text is in `index.html`: `LAYERS`, `BASE`, `QA`, `TOUR`, `UI` (page) and `GATE_UI` (popup), each field as `B("English","Français")`.
+A verdict is `{c, v, tm}`: colour (`ok | warn | part | bad`), label key, timing (`now | prog | none | gated`).
+Author links are in the `AUTHOR` object near the top of the script.
