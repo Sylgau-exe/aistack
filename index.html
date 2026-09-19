@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="author" content="Sylvain Gauthier">
+<meta name="description" content="AI Sovereign Stack — where Canada can be sovereign in the AI stack, alone and as an EU associate member. By Sylvain Gauthier with Claude. Draft for review.">
+<meta property="og:title" content="AI Sovereign Stack — Sylvain Gauthier">
+<meta property="og:description" content="Canada + EU: what an AI alliance could look like under associate membership. Click any layer or verdict. Comments welcome.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>[hidden]{display:none!important}</style>
+<script>
+window.onerror=function(m){ try{ var b=document.getElementById("errbar"); if(!b){ b=document.createElement("div"); b.id="errbar"; b.style.cssText="position:fixed;left:16px;right:16px;bottom:16px;z-index:999;background:#3a1c1c;color:#F3EDE2;border:1px solid #D8474B;border-radius:12px;padding:10px 14px;font:13px sans-serif"; document.body.appendChild(b);} b.textContent="Something went wrong on this page: "+m; }catch(x){} };
+window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.reason.message)||ev.reason)); };
+</script>
+<title>AI Sovereign Stack</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+</head>
+<body>
+<style>
+  :root{
+    --ink:#0B1826; --ink-2:#12283C; --ink-3:#1A3A55; --line:#2B4C69;
+    --ivory:#F3EDE2; --muted:#9FB3C4; --dim:#6B8194; --body-t:#DDE5EC;
+    --gold:#E3A63B; --gold-2:#F5C96B; --teal:#4FB8AD; --teal-2:#8BD9D0;
+    --ok:#2FB44A; --ok-t:#0B1826; --warn:#F2B531; --warn-t:#0B1826; --part:#F08A5C; --part-t:#0B1826; --bad:#D8474B; --bad-t:#F3EDE2;
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+    --ease:cubic-bezier(.22,.9,.26,1);
+    color-scheme:dark;
+  }
+  html,body{height:100%}
+  body{margin:0;background:var(--ink);color:var(--ivory);font-family:var(--body);font-size:15px;line-height:1.5;overflow:hidden}
+  .app{position:relative;height:100%;display:flex;flex-direction:column;padding-inline:16px;padding-block:0 12px;overflow:hidden}
+  .spot{position:fixed;inset:-20%;pointer-events:none;z-index:0;background:
+    radial-gradient(700px 700px at var(--mx,50%) var(--my,30%), rgba(227,166,59,.13), transparent 60%),
+    radial-gradient(900px 700px at 100% 100%, rgba(79,184,173,.10), transparent 60%)}
+  header{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:18px 8px}
+  .brand h1{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.8vw,34px);line-height:1.05;margin:0;letter-spacing:-.01em}
+  .brand p{margin:4px 0 0;color:var(--muted);max-width:66ch;font-size:14px}
+  .byline{margin:8px 0 0!important;font-size:13px;color:var(--ivory)!important;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .byline b{font-family:var(--display);font-weight:700}
+  .byline .with{color:var(--muted)}
+  .byline a{color:var(--gold-2);text-decoration:none;border:1px solid rgba(227,166,59,.45);border-radius:999px;padding:3px 10px;font:600 11.5px/1 var(--body);letter-spacing:.04em}
+  .byline a:hover{background:rgba(227,166,59,.12)}
+  .brand .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--ink-2)}
+  .lang button{background:none;border:0;color:var(--muted);font:600 12px/1 var(--body);letter-spacing:.08em;padding:9px 14px;cursor:pointer}
+  .lang button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+  button:focus-visible,.cell:focus-visible,.pill:focus-visible,.tab:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+  .ibtn{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ivory);height:38px;padding:0 14px;border-radius:999px;cursor:pointer;font:500 13px/1 var(--body);display:inline-flex;align-items:center;gap:8px}
+  .ibtn:hover{border-color:var(--gold-2);background:rgba(255,255,255,.1)}
+  .ibtn.on{border-color:var(--gold);color:var(--gold-2)}
+  .ibtn.round{width:38px;padding:0;justify-content:center;font-size:18px}
+  .tourbtn{background:var(--gold);border:0;color:var(--ink);height:38px;padding:0 16px;border-radius:999px;cursor:pointer;font:600 13px/1 var(--body);display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(227,166,59,.3)}
+  .tourbtn.on{background:rgba(255,255,255,.08);color:var(--ivory);border:1px solid var(--line);box-shadow:none}
+
+  /* ---------- camera & world ---------- */
+  .viewport{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:18px}
+  .world{position:absolute;left:0;top:0;width:1240px;height:820px;transform-origin:0 0;transition:transform 1.05s var(--ease),filter .6s ease;will-change:transform}
+  .world.away{filter:blur(2px) saturate(.7)}
+  .world.away .cell,.world.away .pill,.world.away .colhead,.world.away .base{opacity:.35;pointer-events:none}
+  .colhead{position:absolute;top:0;font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:6px 0;white-space:nowrap}
+  .colhead.tog{color:var(--gold-2)}
+  .togband{position:absolute;left:846px;top:0;width:262px;height:730px;border-radius:16px;background:rgba(227,166,59,.06);border:1px solid rgba(227,166,59,.18)}
+  .cell{position:absolute;box-sizing:border-box;left:0;width:280px;height:118px;padding:14px 16px;border-radius:16px;background:linear-gradient(160deg,rgba(26,58,85,.85),rgba(18,40,60,.85));border:1px solid var(--line);border-left-width:4px;
+    cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s,opacity .5s,border-color .3s;display:flex;flex-direction:column;gap:3px;text-align:left;color:var(--ivory);font-family:var(--body)}
+  .cell:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 40px rgba(0,0,0,.45);border-color:var(--gold-2)}
+  .cell .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .cell .t{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.1}
+  .cell .s{font-size:12px;color:var(--muted);line-height:1.3}
+  .cell.ok{border-left-color:var(--ok)} .cell.warn{border-left-color:var(--warn)} .cell.bad{border-left-color:var(--bad)} .cell.part{border-left-color:var(--part)}
+  .pillwrap{position:absolute;width:236px;display:flex;flex-direction:column;gap:6px}
+  .pill{box-sizing:border-box;width:100%;height:40px;border:0;border-radius:999px;cursor:pointer;font:700 13px/1 var(--body);letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .3s var(--ease),box-shadow .3s}
+  .pill:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.45)}
+  .pill.ok{background:var(--ok);color:var(--ok-t)} .pill.warn{background:var(--warn);color:var(--warn-t)} .pill.part{background:var(--part);color:var(--part-t)} .pill.bad{background:var(--bad);color:var(--bad-t)}
+  .timing{font:600 10.5px/1.3 var(--mono);color:var(--muted);letter-spacing:.02em;padding-left:4px;text-transform:uppercase}
+  .timing.gated{color:var(--gold-2)}
+  .short{font-size:11.5px;line-height:1.3;color:var(--muted);padding-left:4px;margin-top:2px}
+  .timing .g{display:inline-block;width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor;vertical-align:-1px;margin-right:5px}
+  .timing.now .g{background:currentColor} .timing.prog .g{background:linear-gradient(90deg,currentColor 50%,transparent 50%)} .timing.gated .g{border-radius:2px}
+  .base{position:absolute;left:0;top:742px;width:1108px;height:60px;box-sizing:border-box;border-radius:14px;background:rgba(243,237,226,.07);border:1px solid rgba(243,237,226,.12);padding:10px 18px;cursor:pointer;text-align:left;color:var(--ivory);font-family:var(--body);transition:border-color .3s}
+  .base:hover{border-color:var(--gold-2)}
+  .base b{display:block;font-family:var(--display);font-size:15px}
+  .base span{font-size:12.5px;color:var(--muted)}
+  .cell.enter,.pillwrap.enter,.base.enter{animation:nodeIn .7s var(--ease) both}
+  @keyframes nodeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .world.tour .cell,.world.tour .pillwrap,.world.tour .base{opacity:.4}
+  .world.tour .focus{opacity:1}
+  .world.tour .cell.focus{border-color:var(--gold-2);box-shadow:0 0 0 1px rgba(245,201,107,.5),0 0 50px rgba(227,166,59,.4)}
+
+  /* ---------- popover for pills ---------- */
+  .pop{position:absolute;z-index:20;width:min(380px,calc(100% - 24px));box-sizing:border-box;border-radius:16px;background:linear-gradient(165deg,#1B3D5A,#102539);border:1px solid rgba(227,166,59,.55);box-shadow:0 30px 80px rgba(0,0,0,.6);padding:16px 18px 14px;animation:capIn .35s var(--ease) both}
+  .pop[hidden]{display:none}
+  .pop .ph{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .pop .sw{width:14px;height:14px;border-radius:50%;flex:none}
+  .pop h4{margin:0;font-family:var(--display);font-size:17px;line-height:1.1}
+  .pop .x{margin-left:auto;background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 6px}
+  .pop p{margin:0 0 8px;font-size:13.5px;color:var(--body-t);line-height:1.5}
+  .pop .tm{font:600 11px/1.4 var(--mono);color:var(--gold-2);letter-spacing:.04em;text-transform:uppercase;margin-top:6px}
+  .pop .more{margin-top:10px;font-size:12.5px}
+  .pop .more button{background:none;border:0;color:var(--gold-2);cursor:pointer;font:600 12.5px var(--body);padding:0}
+
+  /* ---------- stage card ---------- */
+  .stage{position:absolute;z-index:10;inset:8px;box-sizing:border-box;border-radius:22px;background:linear-gradient(165deg,#1B3D5A,#102539);border:1px solid rgba(227,166,59,.55);box-shadow:0 40px 100px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;animation:qaIn .5s var(--ease) both}
+  .stage[hidden]{display:none}
+  @keyframes qaIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+  .shead{display:flex;align-items:flex-start;gap:14px;padding:22px 26px 10px}
+  .shead .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  .shead h2{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,32px);line-height:1.05;margin:0;text-wrap:balance}
+  .shead .k{font-size:14px;color:var(--muted);margin-top:6px;max-width:70ch}
+  .sactions{margin-left:auto;display:flex;gap:8px;flex:none}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:6px 26px 0}
+  .tab{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 12px;font:500 12.5px/1 var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .tab[aria-current="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .tab:hover{border-color:var(--gold-2);color:var(--ivory)} .tab[aria-current="true"]:hover{color:var(--ink)}
+  .tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dcontent{flex:1;min-height:0;overflow:auto;padding:14px 26px 24px;animation:capIn .4s var(--ease) both}
+  .dcontent h3{font-family:var(--display);font-weight:600;font-size:17px;margin:14px 0 8px;color:var(--gold-2)}
+  .dcontent p{margin:0 0 12px;max-width:68ch;color:var(--body-t)}
+  .dcontent p.lead{font-size:16.5px;color:var(--ivory)}
+  .dcontent ul{margin:0 0 14px;padding-left:18px;color:var(--body-t);max-width:68ch}
+  .dcontent li{margin:0 0 7px}
+  .verdictrow{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 14px}
+  .vchip{border-radius:12px;padding:10px 14px;background:rgba(0,0,0,.22);min-width:150px;flex:1 1 150px}
+  .vchip small{display:block;font:600 10.5px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .vchip b{display:inline-flex;align-items:center;gap:7px;font-size:14px}
+  .vchip b i{width:10px;height:10px;border-radius:50%;flex:none}
+  .vchip .tm{font:600 10.5px/1.4 var(--mono);color:var(--muted);text-transform:uppercase;margin-top:5px;display:block}
+  .note{border-left:3px solid var(--teal);background:rgba(79,184,173,.08);padding:10px 14px;border-radius:0 10px 10px 0;margin:10px 0 16px;color:var(--body-t);max-width:72ch}
+  .note.gold{border-color:var(--gold);background:rgba(227,166,59,.08)}
+  .note b{display:block;font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-2);margin-bottom:4px}
+  .stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:6px 0 16px;max-width:760px}
+  .stat div{background:rgba(0,0,0,.22);border-radius:12px;padding:12px 14px}
+  .stat b{display:block;font-family:var(--mono);font-weight:500;font-size:19px;color:var(--gold-2)}
+  .stat small{color:var(--muted);font-size:12px;line-height:1.3;display:block;margin-top:2px}
+
+  /* ---------- Q&A ---------- */
+  .qa{position:absolute;inset:8px;z-index:11;box-sizing:border-box;border-radius:22px;background:linear-gradient(165deg,#1B3D5A,#102539);border:1px solid rgba(227,166,59,.55);box-shadow:0 40px 100px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;animation:qaIn .5s var(--ease) both}
+  .qa[hidden]{display:none}
+  .qahead{display:flex;align-items:flex-start;gap:14px;padding:22px 26px 10px}
+  .qahead h2{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.05;margin:0}
+  .qahead p{margin:6px 0 0;color:var(--muted);font-size:13.5px;max-width:72ch}
+  .qatools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:6px 26px 10px}
+  .qatools input{flex:1 1 240px;min-width:200px;height:36px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ivory);padding:0 14px;font:14px var(--body);outline:none}
+  .qatools input:focus{border-color:var(--gold-2)} .qatools input::placeholder{color:var(--dim)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 26px 10px}
+  .chip{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:6px 11px;font:500 12px/1 var(--body);cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+  .chip:hover{border-color:var(--gold-2);color:var(--ivory)} .chip[aria-pressed="true"]:hover{color:var(--ink)}
+  .qalist{flex:1;min-height:0;overflow:auto;padding:0 26px 24px;display:flex;flex-direction:column;gap:8px}
+  .qi{flex:none;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.04);overflow:hidden}
+  .qi.open{border-color:rgba(227,166,59,.45);background:rgba(255,255,255,.06)}
+  .qi .qq{width:100%;text-align:left;background:none;border:0;color:var(--ivory);cursor:pointer;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;font:500 15px/1.35 var(--body)}
+  .qi .qq .who{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-top:3px;width:120px}
+  .qi .qq .txt{flex:1}
+  .qi .qq .car{flex:none;color:var(--dim);transition:transform .3s;margin-top:2px}
+  .qi.open .qq .car{transform:rotate(90deg);color:var(--gold-2)}
+  .qi .qa-a{display:none;padding:0 16px 16px 148px;color:var(--body-t);font-size:14.5px;line-height:1.55;max-width:80ch}
+  .qi.open .qa-a{display:block;animation:capIn .35s var(--ease) both}
+  .qi .qa-a p{margin:0 0 10px}
+  .qaempty{color:var(--muted);padding:20px 4px}
+  .contrib{margin:0 26px 12px;border:1px dashed rgba(227,166,59,.5);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--body-t)}
+  .contrib b{color:var(--gold-2)}
+
+  /* ---------- tour caption ---------- */
+  .caption{position:absolute;z-index:12;left:50%;bottom:18px;transform:translateX(-50%) translateY(30px);width:min(680px,calc(100% - 32px));box-sizing:border-box;border-radius:18px;background:linear-gradient(165deg,rgba(27,61,90,.96),rgba(16,37,57,.96));border:1px solid rgba(227,166,59,.5);box-shadow:0 30px 80px rgba(0,0,0,.6);padding:16px 20px 14px;opacity:0;pointer-events:none;transition:opacity .45s ease,transform .6s var(--ease)}
+  .caption.show{opacity:1;transform:translateX(-50%);pointer-events:auto}
+  .caption .ctop{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .caption .step{font-family:var(--mono);font-size:11px;color:var(--gold-2);letter-spacing:.1em}
+  .caption .dots{display:flex;gap:5px;margin-left:auto}
+  .caption .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:background .3s,transform .3s}
+  .caption .dots i.done{background:rgba(245,201,107,.5)} .caption .dots i.cur{background:var(--gold);transform:scale(1.35)}
+  .caption h3{font-family:var(--display);font-weight:700;font-size:clamp(18px,2vw,23px);line-height:1.1;margin:0 0 6px;text-wrap:balance}
+  .caption p{margin:0;color:var(--body-t);font-size:14.5px;line-height:1.5;min-height:3.2em}
+  .caption .cbar{display:flex;align-items:center;gap:8px;margin-top:12px}
+  .caption .cbar .ibtn{height:34px;padding:0 12px;font-size:12.5px}
+  .caption .cbar .ibtn.primary{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600}
+  .caption .cbody{animation:capIn .5s var(--ease) both}
+  @keyframes capIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .foot{position:relative;z-index:3;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:10px;color:var(--muted);font-size:12.5px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:50%}
+  .credit{font-size:12px;color:var(--dim)} .credit a{color:var(--gold-2);text-decoration:none}
+  .crumbs{display:flex;gap:6px;align-items:center;font-size:12.5px}
+  .crumbs button{background:none;border:0;color:var(--muted);cursor:pointer;font:500 12.5px/1 var(--body);padding:4px 2px}
+  .crumbs button:hover{color:var(--gold-2)} .crumbs .cur{color:var(--ivory)} .crumbs .sep{color:var(--dim)}
+
+  @media (max-width:760px){
+    .brand p{display:none} .shead,.qahead,.qatools,.chips,.qalist,.tabs,.dcontent{padding-inline:14px}
+    .qi .qq .who{display:none} .qi .qa-a{padding-left:16px} .caption{bottom:10px;padding:12px 14px 12px} .caption p{min-height:0;font-size:13.5px}
+    .caption .cbar .ibtn span.lbl{display:none} .contrib{margin-inline:14px}
+  }
+  @media (prefers-reduced-motion:reduce){ .world,.stage,.cell,.pill,.caption,.pop{transition:none;animation:none} .cell.enter,.pillwrap.enter,.base.enter,.caption .cbody,.dcontent{animation:none} }
+</style>
+
+<div class="spot" id="spot"></div>
+<div class="app">
+  <header>
+    <div class="brand">
+      <p class="eyebrow" data-i18n="eyebrow"></p>
+      <h1 data-i18n="title"></h1>
+      <p data-i18n="tagline"></p>
+      <p class="byline" id="byline"></p>
+    </div>
+    <div class="controls">
+      <button class="ibtn" id="qabtn" type="button" onclick="toggleQA()"><span id="qalbl"></span></button>
+      <button class="tourbtn" id="tourbtn" type="button" onclick="toggleTour()"><span>▶</span><span id="tourlbl"></span></button>
+      <div class="lang" role="group" aria-label="Language">
+        <button id="lang-en" type="button" aria-pressed="true" onclick="setLang('en')">EN</button>
+        <button id="lang-fr" type="button" aria-pressed="false" onclick="setLang('fr')">FR</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="viewport" id="viewport">
+    <div class="world" id="world"></div>
+    <div class="pop" id="pop" hidden role="dialog"></div>
+    <section class="stage" id="stage" hidden aria-live="polite"></section>
+    <aside class="caption" id="caption" aria-live="polite"></aside>
+    <section class="qa" id="qa" hidden aria-label="Q&A"></section>
+  </div>
+
+  <div class="foot">
+    <div class="crumbs" id="crumbs"></div>
+    <div class="legend" id="legend"></div>
+    <div class="credit" id="credit"></div>
+  </div>
+</div>
+
+<script>
+// ---------- i18n ----------
+const UI = {
+ en:{eyebrow:"Canada + EU · what an alliance could look like as an associate member", title:"AI Sovereign Stack", tagline:"Where Canada can own its data and its algorithms without becoming a hyperscaler, and what changes if Canada joins Europe's digital space as an associate member. Click a layer to fly in; click any verdict for the reason behind it. Comments welcome: this is a draft for review.",
+     home:"The stack", back:"Back", close:"Close", tour:"Guided tour", tour_exit:"Exit tour", qa:"Q&A", qa_title:"Questions & answers", qa_sub:"The questions this model has been asked so far, with the answers as they stand. Add yours in the comments and I will fold the good ones in.",
+     qa_search:"Search questions…", qa_all:"All", qa_none:"No question matches.", contrib:"How to improve this — use the comment tool on this page to challenge a verdict, add a source, or propose a missing layer. Every verdict here is a claim, not a fact.",
+     col_ca:"Canada alone", col_eu:"Europe alone", col_tog:"Together (associate member)", leg:{ok:"Sovereign",warn:"Achievable / constrained",part:"Partial",bad:"Not sovereign"},
+     tm:{now:"Now",prog:"In progress",none:"Not started",gated:"Gated"}, tmlong:{now:"Operating today",prog:"Under way, not finished",none:"Nothing started yet",gated:"Blocked until a named decision is made"},
+     v:{ok:"Sovereign",warn:"Achievable",cons:"Constrained",part:"Partial, 2030s",bad:"Not sovereign",lead:"Sovereign — leads",plus:"Sovereign +",supply:"Canada supplies EU"},
+     facets:{what:"What this layer is",ca:"Canada alone",eu:"Europe alone",tog:"Together",gate:"Timing & gate"},
+     step:"Step", of:"of", prev:"Previous", next:"Next", finish:"Finish", explore:"Explore this layer", open_layer:"Open the full layer"},
+ fr:{eyebrow:"Canada + UE · à quoi ressemblerait une alliance comme membre associé", title:"Pile souveraine IA", tagline:"Où le Canada peut posséder ses données et ses algorithmes sans devenir un hyperscaler, et ce qui change si le Canada rejoint l'espace numérique européen comme membre associé. Cliquez sur une couche pour y plonger; cliquez sur un verdict pour en voir la raison. Vos commentaires sont bienvenus : c'est un brouillon à réviser.",
+     home:"La pile", back:"Retour", close:"Fermer", tour:"Visite guidée", tour_exit:"Quitter la visite", qa:"Q&R", qa_title:"Questions et réponses", qa_sub:"Les questions posées jusqu'ici sur ce modèle, avec les réponses telles qu'elles se tiennent. Ajoutez les vôtres en commentaire et j'intégrerai les meilleures.",
+     qa_search:"Chercher une question…", qa_all:"Toutes", qa_none:"Aucune question ne correspond.", contrib:"Pour améliorer ceci — utilisez l'outil de commentaires de la page pour contester un verdict, ajouter une source ou proposer une couche manquante. Chaque verdict ici est une affirmation, pas un fait.",
+     col_ca:"Canada seul", col_eu:"Europe seule", col_tog:"Ensemble (membre associé)", leg:{ok:"Souverain",warn:"Atteignable / contraint",part:"Partiel",bad:"Non souverain"},
+     tm:{now:"Maintenant",prog:"En cours",none:"Pas commencé",gated:"Bloqué"}, tmlong:{now:"En exploitation aujourd'hui",prog:"En cours, pas terminé",none:"Rien de commencé",gated:"Bloqué jusqu'à une décision précise"},
+     v:{ok:"Souverain",warn:"Atteignable",cons:"Contraint",part:"Partiel, années 2030",bad:"Non souverain",lead:"Souverain — en tête",plus:"Souverain +",supply:"Le Canada fournit l'UE"},
+     facets:{what:"Cette couche",ca:"Canada seul",eu:"Europe seule",tog:"Ensemble",gate:"Échéancier et verrou"},
+     step:"Étape", of:"de", prev:"Précédent", next:"Suivant", finish:"Terminer", explore:"Explorer cette couche", open_layer:"Ouvrir la couche complète"}
+};
+const AUTHOR={name:"Sylvain Gauthier",linkedin:"",instagram:"",web:"https://executiveproducer.ca"};
+let LANG="en"; try{const s=localStorage.getItem("ss-lang"); if(s==="fr"||s==="en") LANG=s;}catch(e){}
+const T=(o)=>(o&&typeof o==="object"&&("en" in o))?(o[LANG]??o.en):o;
+const B=(en,fr)=>({en,fr});
+const COLORS={ok:"var(--ok)",warn:"var(--warn)",part:"var(--part)",bad:"var(--bad)"};
+
+// ---------- content ----------
+// verdict: {c: ok|warn|part|bad, label key in UI.v, tm: now|prog|none|gated, why:B, gate:B?}
+const LAYERS=[
+ { id:"model", n:"4", y:60, c:"ok",
+   t:B("Model / algorithm","Modèle / algorithme"), s:B("Weights, training data, inference logs, fine-tuning","Poids, données d'entraînement, journaux d'inférence, réglage fin"),
+   what:[B("The algorithm layer is the model itself: its weights, the data it was trained on, the logs of every prompt it answers, and any fine-tuning a customer adds. Whoever holds the weights and the logs holds the knowledge.","La couche algorithmique, c'est le modèle lui-même : ses poids, les données qui l'ont entraîné, les journaux de chaque requête et le réglage fin qu'un client y ajoute. Qui détient les poids et les journaux détient le savoir."),
+         B("Sovereignty here means a model trained and run by a company under your own law, so that no foreign lab sees your prompts and no foreign government can order the weights handed over.","La souveraineté ici, c'est un modèle entraîné et exploité par une entreprise soumise à votre propre loi, pour qu'aucun laboratoire étranger ne voie vos requêtes et qu'aucun gouvernement étranger ne puisse exiger les poids.")],
+   ca:{c:"ok",v:"ok",tm:"now",short:B("Cohere (Toronto). One lab, sub-frontier scale.","Cohere (Toronto). Un seul labo, sous la frontière."),why:B("Cohere, headquartered in Toronto, trains and serves its own models. Run on Canadian hardware under a Canadian operator, nothing leaves the country and no US company is in the loop. The limit is scale: one lab, below the frontier. If you need Claude, GPT or Gemini, the model is American wherever you run it — you get data residency, not sovereignty.","Cohere, dont le siège est à Toronto, entraîne et exploite ses propres modèles. Sur du matériel canadien sous un exploitant canadien, rien ne quitte le pays et aucune entreprise américaine n'est dans la boucle. La limite, c'est l'échelle : un seul laboratoire, sous la frontière. Si vous avez besoin de Claude, GPT ou Gemini, le modèle est américain où que vous l'exécutiez — vous obtenez la résidence des données, pas la souveraineté.")},
+   eu:{c:"ok",v:"ok",tm:"now",short:B("Mistral (FR), Aleph Alpha (DE). Short of compute to train.","Mistral (FR), Aleph Alpha (DE). Manque de calcul pour entraîner."),why:B("Mistral (France) and Aleph Alpha (Germany) ship competitive models today. Europe's constraint is the opposite of Canada's: it has the labs but is short of affordable compute to train the next generation.","Mistral (France) et Aleph Alpha (Allemagne) livrent des modèles compétitifs aujourd'hui. La contrainte européenne est l'inverse de la canadienne : elle a les laboratoires, mais manque de calcul abordable pour entraîner la prochaine génération.")},
+   tog:{c:"ok",v:"plus",tm:"none",short:B("A non-US model bloc with scale, trained on Canadian power.","Un bloc de modèles non américain, entraîné sur l'énergie canadienne."),why:B("Three labs, joint training runs on cheap Canadian power, weights co-owned, each side's data staying home. That is a non-US model bloc with enough scale to matter for government, banking and research workloads. Nothing of the sort has been signed.","Trois laboratoires, des entraînements conjoints sur l'énergie canadienne bon marché, des poids codétenus, les données de chacun restant chez soi. C'est un bloc de modèles non américain avec assez d'échelle pour compter dans les charges gouvernementales, bancaires et de recherche. Rien de tel n'a été signé."),gate:B("Needs a Canada–EU joint-training agreement and a shared rule on who owns co-trained weights.","Exige une entente Canada–UE d'entraînement conjoint et une règle commune sur la propriété des poids co-entraînés.")},
+   brings:B("Canada brings cheap training compute. Europe brings two more labs and 450 million users.","Le Canada apporte le calcul d'entraînement bon marché. L'Europe apporte deux laboratoires de plus et 450 millions d'utilisateurs.")},
+ { id:"platform", n:"3", y:196, c:"warn",
+   t:B("Platform / services","Plateforme / services"), s:B("Databases, identity, storage, monitoring, orchestration","Bases de données, identité, stockage, surveillance, orchestration"),
+   what:[B("This is what hyperscalers actually sell: the managed databases, identity systems, storage, monitoring and orchestration around the compute. It is the reason AWS is convenient, and it is the layer Bell is not building.","C'est ce que vendent réellement les hyperscalers : les bases de données gérées, les systèmes d'identité, le stockage, la surveillance et l'orchestration autour du calcul. C'est ce qui rend AWS commode, et c'est la couche que Bell ne construit pas."),
+         B("It can be assembled from open-source software (Kubernetes, Postgres, Kafka, MinIO) and run by a domestic operator. More work than clicking a button, but a labour gap, not a capability gap.","On peut l'assembler à partir de logiciels libres (Kubernetes, Postgres, Kafka, MinIO) et la faire exploiter par un opérateur national. Plus de travail qu'un clic, mais un écart de main-d'œuvre, pas de capacité.")],
+   ca:{c:"warn",v:"warn",tm:"none",short:B("Open source, no Canadian sovereign cloud at scale.","Logiciel libre, pas de nuage souverain canadien à l'échelle."),why:B("No Canadian sovereign cloud exists at scale. Open source plus a Canadian systems integrator can build one, and a bank would need exactly that. Possible today, at the cost of convenience and breadth.","Aucun nuage souverain canadien n'existe à grande échelle. Le logiciel libre plus un intégrateur canadien peuvent en bâtir un, et c'est précisément ce dont une banque aurait besoin. Possible aujourd'hui, au prix de la commodité et de l'étendue.")},
+   eu:{c:"ok",v:"ok",tm:"now",short:B("OVHcloud, Scaleway, Ionos, SAP, Gaia-X. Ten years of work.","OVHcloud, Scaleway, Ionos, SAP, Gaia-X. Dix ans de travail."),why:B("OVHcloud, Scaleway, Ionos, SAP's sovereign stack and the Gaia-X standards exist because Europe has fought the US CLOUD Act since the Schrems rulings. Ten years of work, operating today.","OVHcloud, Scaleway, Ionos, la pile souveraine de SAP et les normes Gaia-X existent parce que l'Europe combat le CLOUD Act américain depuis les arrêts Schrems. Dix ans de travail, en exploitation aujourd'hui.")},
+   tog:{c:"ok",v:"ok",tm:"gated",short:B("Proven EU stacks running on Canadian floor space.","Des piles européennes éprouvées sur du plancher canadien."),why:B("Licence a proven European stack and run it on Canadian floor space. Canada skips a decade of platform engineering; Europe gets a second continent to sell on.","Prendre sous licence une pile européenne éprouvée et l'exploiter sur du plancher canadien. Le Canada saute une décennie d'ingénierie de plateforme; l'Europe gagne un deuxième continent où vendre."),gate:B("Gated on a licensing partnership and on Canada being recognized under the EU Cloud & AI Development Act, so a Canadian-run copy still counts as sovereign for European customers.","Bloqué par un partenariat de licence et par la reconnaissance du Canada sous la loi européenne sur le nuage et l'IA (CADA), pour qu'une copie exploitée au Canada compte encore comme souveraine pour les clients européens.")},
+   brings:B("Europe brings the software stack. Canada brings a second continent to sell it on.","L'Europe apporte la pile logicielle. Le Canada apporte un deuxième continent où la vendre.")},
+ { id:"silicon", n:"2", y:332, c:"bad",
+   t:B("Compute / silicon","Calcul / silicium"), s:B("GPUs and accelerators","GPU et accélérateurs"),
+   what:[B("The chips: Nvidia GPUs, Groq and Cerebras accelerators. All American, all under US export control, all fabricated by TSMC in Taiwan. Nobody outside the US and Taiwan makes them at scale.","Les puces : GPU Nvidia, accélérateurs Groq et Cerebras. Tous américains, tous sous contrôle des exportations américain, tous fabriqués par TSMC à Taïwan. Personne hors des États-Unis et de Taïwan n'en produit à grande échelle."),
+         B("Owning the chip is not the same as controlling the data on it. A Nvidia card in Regina under a Canadian operator is out of reach of a US subpoena; the same card in Virginia is not. The chip is a tool you buy; the hyperscaler is a landlord you rent from.","Posséder la puce n'est pas contrôler les données qu'elle traite. Une carte Nvidia à Regina sous un exploitant canadien échappe à une assignation américaine; la même carte en Virginie, non. La puce est un outil qu'on achète; l'hyperscaler, un propriétaire à qui l'on loue.")],
+   ca:{c:"bad",v:"bad",tm:"none",short:B("Tenstorrent designs (Toronto); no fab, no volume.","Tenstorrent conçoit (Toronto); ni fonderie ni volume."),why:B("Tenstorrent, founded in Toronto, designs open RISC-V AI chips, but there is no Canadian fab and no volume. No domestic path exists this decade.","Tenstorrent, fondée à Toronto, conçoit des puces IA RISC-V ouvertes, mais il n'y a ni fonderie canadienne ni volume. Aucune voie nationale n'existe cette décennie.")},
+   eu:{c:"bad",v:"bad",tm:"none",short:B("ASML makes the tools; no European GPU, no leading fab.","ASML fait les machines; ni GPU européen ni fonderie de pointe."),why:B("ASML makes the lithography machines TSMC depends on, which is real leverage, but Europe has no competitive GPU and no leading-edge fab. The EU Chips Act has not changed that.","ASML fabrique les machines de lithographie dont dépend TSMC, un vrai levier, mais l'Europe n'a ni GPU compétitif ni fonderie de pointe. La loi européenne sur les puces n'y a rien changé.")},
+   tog:{c:"part",v:"part",tm:"none",short:B("“Not exclusively American” is the realistic ceiling.","« Pas exclusivement américain » est le plafond réaliste."),why:B("Joint design in Canada and Europe, fabrication still in Taiwan. The realistic ceiling is “not exclusively American”, and not before the 2030s. This is the one layer no alliance fixes this decade.","Conception conjointe au Canada et en Europe, fabrication toujours à Taïwan. Le plafond réaliste est « pas exclusivement américain », et pas avant les années 2030. C'est la seule couche qu'aucune alliance ne règle cette décennie."),gate:B("Not gated on a decision; gated on physics and a fab that does not exist.","Pas bloqué par une décision; bloqué par la physique et une fonderie qui n'existe pas.")},
+   brings:B("Canada brings open chip design. Europe brings ASML leverage and the EU Chips Act.","Le Canada apporte la conception ouverte de puces. L'Europe apporte le levier ASML et la loi sur les puces.")},
+ { id:"quantum", n:"2b", y:468, c:"ok",
+   t:B("Quantum compute","Calcul quantique"), s:B("Next-generation hardware, fault-tolerant in the 2030s","Matériel de nouvelle génération, tolérant aux fautes dans les années 2030"),
+   what:[B("A quantum computer does not replace a GPU. It is bad at the billions of ordinary multiplications that train AI. What it does is solve a narrow class of problems where possibilities explode: simulating molecules, optimizing enormous combinations, and breaking today's encryption.","Un ordinateur quantique ne remplace pas un GPU. Il est mauvais pour les milliards de multiplications ordinaires qui entraînent l'IA. Ce qu'il fait, c'est résoudre une classe étroite de problèmes où les possibilités explosent : simuler des molécules, optimiser des combinaisons énormes et casser le chiffrement actuel."),
+         B("It matters to this stack in two ways. It is the one hardware layer where Canada leads rather than follows. And it means “sovereign” data has a shelf life: anything encrypted today and copied by an adversary can be read in the 2030s unless the stack is post-quantum from the start.","Elle compte pour cette pile de deux façons. C'est la seule couche matérielle où le Canada mène au lieu de suivre. Et elle signifie que les données « souveraines » ont une date de péremption : tout ce qui est chiffré aujourd'hui et copié par un adversaire sera lisible dans les années 2030, à moins que la pile soit post-quantique dès le départ.")],
+   ca:{c:"ok",v:"lead",tm:"prog",short:B("Xanadu (US$10B+), Photonic (US$2B), Nord Quantique (US$1.4B).","Xanadu (10 G$ US+), Photonic (2 G$ US), Nord Quantique (1,4 G$ US)."),why:B("Four unicorns, three still headquartered here: Xanadu in Toronto (photonic, listed in March 2026, valuation above US$10B), Photonic Inc. in Vancouver (silicon T-centres, US$2B), Nord Quantique in Sherbrooke (superconducting, US$1.4B). D-Wave is the cautionary tale: born in Burnaby, now in Palo Alto. The December 2025 Quantum Champions Program pays up to $23M per company with a clause requiring the headquarters to stay in Canada.","Quatre licornes, trois toujours établies ici : Xanadu à Toronto (photonique, en bourse depuis mars 2026, plus de 10 G$ US), Photonic Inc. à Vancouver (centres T sur silicium, 2 G$ US), Nord Quantique à Sherbrooke (supraconducteur, 1,4 G$ US). D-Wave est la mise en garde : née à Burnaby, aujourd'hui à Palo Alto. Le Programme des champions quantiques de décembre 2025 verse jusqu'à 23 M$ par entreprise, à condition que le siège reste au Canada.")},
+   eu:{c:"ok",v:"ok",tm:"prog",short:B("IQM (FI), Pasqal (FR), Alice & Bob (FR), EuroHPC quantum.","IQM (FI), Pasqal (FR), Alice & Bob (FR), EuroHPC quantique."),why:B("IQM (Finland), Pasqal and Alice & Bob (France), plus EuroHPC's quantum sites. A credible program, behind Canada on private capital.","IQM (Finlande), Pasqal et Alice & Bob (France), plus les sites quantiques d'EuroHPC. Un programme crédible, derrière le Canada pour le capital privé.")},
+   tog:{c:"ok",v:"plus",tm:"none",short:B("The only non-US quantum bloc with three approaches in play.","Le seul bloc quantique non américain avec trois approches."),why:B("The only non-US quantum bloc with three hardware approaches in play — photonic, silicon, superconducting. For once Canada is the senior partner. No bilateral program exists yet.","Le seul bloc quantique non américain avec trois approches matérielles en jeu — photonique, silicium, supraconducteur. Pour une fois, le Canada est le partenaire principal. Aucun programme bilatéral n'existe encore."),gate:B("Needs a Canada–EU quantum program and a joint post-quantum encryption standard for the whole stack.","Exige un programme quantique Canada–UE et une norme commune de chiffrement post-quantique pour toute la pile.")},
+   brings:B("Canada brings the companies. Europe brings EuroHPC sites and public buyers.","Le Canada apporte les entreprises. L'Europe apporte les sites EuroHPC et les acheteurs publics.")},
+ { id:"physical", n:"1", y:604, c:"ok",
+   t:B("Physical","Physique"), s:B("Land, power, fibre, cooling, building, operators","Terrain, énergie, fibre, refroidissement, bâtiment, exploitants"),
+   what:[B("Land, power, fibre, cooling, the building and the people who run it. This layer decides which country's law applies to the data, because the law follows the building. It is the foundation of every other verdict on this page.","Terrain, énergie, fibre, refroidissement, bâtiment et les gens qui l'exploitent. Cette couche décide quelle loi s'applique aux données, parce que la loi suit le bâtiment. C'est le fondement de tous les autres verdicts de cette page."),
+         B("Compute is energy turned into a service. A country with cheap power, cold air and land can sell compute the way it sells gas or potash, at a higher value per unit.","Le calcul, c'est de l'énergie transformée en service. Un pays avec de l'énergie bon marché, de l'air froid et du terrain peut vendre du calcul comme il vend du gaz ou de la potasse, à plus forte valeur.")],
+   ca:{c:"ok",v:"ok",tm:"prog",short:B("Bell AI Fabric 1.2 GW. Cheap energy, cold, land, EU adequacy.","Bell AI Fabric 1,2 GW. Énergie bon marché, froid, terrain, adéquation UE."),why:B("Bell AI Fabric: a 300 MW site at Sherwood near Regina ($1.7B, first capacity in 2027) plus up to 900 MW more announced September 14, 2026, for 1.2 GW in Saskatchewan alone. Canadian land, gas-fired power, Bell fibre, Canadian staff; tenants bring their own chips. Only Sherwood is under construction; the rest is phased as customers sign.","Bell AI Fabric : un site de 300 MW à Sherwood près de Regina (1,7 G$, première capacité en 2027) plus jusqu'à 900 MW annoncés le 14 septembre 2026, pour 1,2 GW en Saskatchewan seulement. Terrain canadien, énergie au gaz, fibre Bell, personnel canadien; les locataires apportent leurs puces. Seul Sherwood est en construction; le reste suit les signatures.")},
+   eu:{c:"warn",v:"cons",tm:"prog",short:B("Gigafactories: 2 of 5 fundable before 2028. Power is expensive.","Gigafactories : 2 sur 5 finançables avant 2028. Énergie chère."),why:B("The EU's €20B InvestAI plan for AI gigafactories is stalling: only two of five sites look fundable before 2028 and the bidder list has shrunk from about 70 to 10. Power is expensive. Europe wants exactly what Canada has.","Le plan InvestAI de 20 G€ pour des gigafactories d'IA s'enlise : seuls deux sites sur cinq semblent finançables avant 2028 et la liste des soumissionnaires est passée d'environ 70 à 10. L'énergie coûte cher. L'Europe veut exactement ce que le Canada possède.")},
+   tog:{c:"ok",v:"supply",tm:"gated",short:B("Canada supplies Europe under 10-year offtake, like minerals.","Le Canada fournit l'Europe sous contrats de 10 ans, comme les minéraux."),why:B("Canada sells European governments, banks and labs sovereign compute at predictable prices under ten-year offtake contracts — the same structure as minerals and energy. Canada already holds an EU data-adequacy decision, so European personal data can lawfully sit in Regina in a way it cannot sit in Virginia.","Le Canada vend aux gouvernements, banques et laboratoires européens du calcul souverain à prix prévisible sous des contrats d'achat de dix ans — la même structure que pour les minéraux et l'énergie. Le Canada détient déjà une décision d'adéquation de l'UE : des données personnelles européennes peuvent légalement se trouver à Regina d'une façon impossible en Virginie."),gate:B("Gated on recognition as a trusted jurisdiction under the EU Cloud & AI Development Act, and on the first offtake contracts.","Bloqué par la reconnaissance comme juridiction de confiance sous la loi européenne sur le nuage et l'IA, et par les premiers contrats d'achat.")},
+   brings:B("Canada brings capacity at predictable prices. Europe brings the anchor customer.","Le Canada apporte la capacité à prix prévisible. L'Europe apporte le client d'ancrage.")}
+];
+const BASE={ t:B("0. Jurisdiction and encryption","0. Juridiction et chiffrement"),
+  s:B("Canada holds EU data adequacy; neither side is reachable by the US CLOUD Act. Missing: recognition under the EU Cloud & AI Development Act, and a joint post-quantum standard.","Le Canada détient l'adéquation de l'UE; aucun des deux n'est atteignable par le CLOUD Act américain. Il manque : la reconnaissance sous la loi européenne sur le nuage et l'IA, et une norme post-quantique commune."),
+  body:[B("Every verdict above rests on this line. Sovereignty of data is a legal fact before it is a technical one: it is set by which country's courts can compel access to the building where the data sits. The US CLOUD Act reaches any US-controlled provider anywhere in the world; it does not reach a Canadian operator on Canadian soil.","Chaque verdict ci-dessus repose sur cette ligne. La souveraineté des données est un fait juridique avant d'être technique : elle dépend des tribunaux qui peuvent forcer l'accès au bâtiment où les données se trouvent. Le CLOUD Act américain atteint tout fournisseur sous contrôle américain, partout; il n'atteint pas un exploitant canadien en sol canadien."),
+        B("Canada is one of the few countries with an EU data-adequacy decision, which is what lets European data lawfully sit here. The trap is that the EU's proposed Cloud & AI Development Act reserves its top assurance tiers for providers not “subject to the control of a third country” — and Canada is a third country. Unless a Canada–EU agreement recognizes Canada as a trusted jurisdiction, Bell is locked out of Europe's most sensitive tiers exactly like AWS. That one clause is what “associate member” would mean in practice for this file.","Le Canada est l'un des rares pays à détenir une décision d'adéquation de l'UE, ce qui permet aux données européennes de résider ici légalement. Le piège : la loi européenne proposée sur le nuage et l'IA réserve ses paliers d'assurance les plus élevés aux fournisseurs qui ne sont pas « sous le contrôle d'un pays tiers » — et le Canada est un pays tiers. À moins qu'une entente Canada–UE reconnaisse le Canada comme juridiction de confiance, Bell est exclu des paliers les plus sensibles, exactement comme AWS. Cette seule clause est ce que « membre associé » voudrait dire en pratique pour ce dossier."),
+        B("Encryption is the second condition. Data copied today can be decrypted by a large quantum computer in the 2030s (“harvest now, decrypt later”). NIST published post-quantum standards in 2024; the Canadian Cyber Centre wants federal systems migrated by 2035. A sovereign stack built in 2026 has to be post-quantum from day one, or its sovereignty expires.","Le chiffrement est la deuxième condition. Des données copiées aujourd'hui pourront être déchiffrées par un grand ordinateur quantique dans les années 2030 (« récolter maintenant, déchiffrer plus tard »). Le NIST a publié ses normes post-quantiques en 2024; le Centre canadien pour la cybersécurité veut les systèmes fédéraux migrés d'ici 2035. Une pile souveraine bâtie en 2026 doit être post-quantique dès le premier jour, sinon sa souveraineté expire.")]};
+
+const QA=[
+ {q:B("Does Bell's Saskatchewan data centre make Bell a hyperscaler?","Le centre de données de Bell en Saskatchewan fait-il de Bell un hyperscaler?"),
+  a:B("No, and Bell isn't trying to be one. A hyperscaler owns the chips, writes the platform software, runs dozens of global regions and spends $80–100B a year to do it. Bell supplies the building, the power, the fibre and the cooling; tenants (Cerebras, CoreWeave, Groq, Cohere) bring their own silicon. Bell spends about $5.6M per MW against an industry norm near $33M because it isn't buying GPUs. The better description is Canada's sovereign AI landlord and utility — the Hydro-Québec of compute, not the Amazon of it.","Non, et Bell ne cherche pas à l'être. Un hyperscaler possède les puces, écrit la plateforme logicielle, exploite des dizaines de régions et dépense 80 à 100 G$ par année pour cela. Bell fournit le bâtiment, l'énergie, la fibre et le refroidissement; les locataires (Cerebras, CoreWeave, Groq, Cohere) apportent leur silicium. Bell dépense environ 5,6 M$ par MW contre une norme d'environ 33 M$, parce qu'elle n'achète pas de GPU. La meilleure description : le propriétaire-utilité souverain de l'IA au Canada — l'Hydro-Québec du calcul, pas son Amazon."), tags:["physical"]},
+ {q:B("Can Canada have sovereignty over its data and algorithms without being a hyperscaler?","Le Canada peut-il être souverain sur ses données et ses algorithmes sans être un hyperscaler?"),
+  a:B("Yes, in three of four layers. Physical (building, power, operator, jurisdiction) is fully Canadian with Bell. Model is Canadian with Cohere. Platform can be assembled from open source by a Canadian integrator. What you cannot get, and neither can Europe, is the silicon. The analogy: Ottawa doesn't need to own Boeing to have a sovereign air force; it needs to own the aircraft and control who can ground them. Bell is buying the aircraft. A hyperscaler is a lease on someone else's air force.","Oui, dans trois couches sur quatre. La physique (bâtiment, énergie, exploitant, juridiction) est entièrement canadienne avec Bell. Le modèle est canadien avec Cohere. La plateforme peut être assemblée en logiciel libre par un intégrateur canadien. Ce qu'on ne peut pas obtenir, pas plus que l'Europe, c'est le silicium. L'analogie : Ottawa n'a pas besoin de posséder Boeing pour avoir une force aérienne souveraine; il doit posséder les avions et contrôler qui peut les clouer au sol. Bell achète les avions. Un hyperscaler, c'est louer la force aérienne de quelqu'un d'autre."), tags:["model","platform","silicon"]},
+ {q:B("Does a Canada–EU partnership fix the non-sovereign layers?","Un partenariat Canada–UE règle-t-il les couches non souveraines?"),
+  a:B("Three of them, and in one Europe needs Canada more than the reverse. Europe's €20B gigafactory plan is stalling (two of five sites fundable before 2028), its power is expensive, and it wants exactly Canada's physical layer. Europe brings a decade of sovereign cloud platforms (OVHcloud, Scaleway, Gaia-X) that turn Canada's yellow platform box green. Together the model layer becomes a real non-US bloc. The silicon stays red for both. And there is a trap: the EU's Cloud & AI Development Act excludes providers controlled by any third country, Canada included, unless a treaty says otherwise.","Trois d'entre elles, et dans l'une l'Europe a plus besoin du Canada que l'inverse. Le plan européen de 20 G€ pour les gigafactories s'enlise (deux sites sur cinq finançables avant 2028), son énergie coûte cher, et elle veut exactement la couche physique du Canada. L'Europe apporte une décennie de plateformes souveraines (OVHcloud, Scaleway, Gaia-X) qui font passer la case plateforme du Canada du jaune au vert. Ensemble, la couche modèle devient un vrai bloc non américain. Le silicium reste rouge pour les deux. Et il y a un piège : la loi européenne sur le nuage et l'IA exclut les fournisseurs contrôlés par tout pays tiers, Canada compris, sauf traité contraire."), tags:["platform","physical","base"]},
+ {q:B("What does “associate member of the EU” mean for this file?","Que veut dire « membre associé de l'UE » pour ce dossier?"),
+  a:B("Concretely, one clause: Canada recognized as a trusted jurisdiction under the EU Cloud & AI Development Act, so a Canadian-operated data centre qualifies for Europe's top assurance tiers. Two of the five “Together” verdicts on this page are gated on that single decision, which makes it the highest-leverage item in the whole picture. Canada's existing EU data-adequacy decision is the foundation it would build on.","Concrètement, une clause : le Canada reconnu comme juridiction de confiance sous la loi européenne sur le nuage et l'IA, pour qu'un centre de données exploité au Canada soit admissible aux paliers d'assurance les plus élevés. Deux des cinq verdicts « Ensemble » de cette page dépendent de cette seule décision, ce qui en fait l'élément à plus fort levier de tout le tableau. La décision d'adéquation que le Canada détient déjà en serait le fondement."), tags:["base"]},
+ {q:B("Do quantum computers affect this stack?","Les ordinateurs quantiques touchent-ils cette pile?"),
+  a:B("In two places. They add a hardware layer where Canada actually leads — Xanadu, Photonic, Nord Quantique, four unicorns with three still headquartered here — and they threaten the zeroth layer, encryption. A large enough quantum computer breaks the RSA and elliptic-curve cryptography protecting nearly all data today. Adversaries copy encrypted traffic now to read it in the 2030s, so sovereignty in 2026 requires post-quantum cryptography in 2026.","À deux endroits. Ils ajoutent une couche matérielle où le Canada mène vraiment — Xanadu, Photonic, Nord Quantique, quatre licornes dont trois toujours établies ici — et ils menacent la couche zéro, le chiffrement. Un ordinateur quantique assez grand casse la cryptographie RSA et à courbes elliptiques qui protège presque toutes les données aujourd'hui. Les adversaires copient le trafic chiffré maintenant pour le lire dans les années 2030; la souveraineté en 2026 exige donc la cryptographie post-quantique en 2026."), tags:["quantum","base"]},
+ {q:B("If quantum doesn't replace GPUs, what does it do?","Si le quantique ne remplace pas les GPU, à quoi sert-il?"),
+  a:B("Four things. Simulating nature at the molecular level (batteries, catalysts, drugs — Canada's mining, energy and pharma). Optimization with too many combinations (fleets, grids, portfolios, chip layouts). Breaking and remaking encryption. And sensing: navigation without GPS, detecting submarines, finding mineral deposits from the air. GPUs make machines that predict; quantum computers make machines that simulate, optimize and break codes. They are neighbours, not competitors, and the first commercial quantum use inside an AI shop will be a specialist co-processor next to the GPUs.","Quatre choses. Simuler la nature à l'échelle moléculaire (batteries, catalyseurs, médicaments — les mines, l'énergie et la pharma du Canada). Optimiser des combinaisons trop nombreuses (flottes, réseaux, portefeuilles, tracés de puces). Casser et refaire le chiffrement. Et capter : naviguer sans GPS, détecter des sous-marins, repérer des gisements depuis les airs. Les GPU font des machines qui prédisent; les ordinateurs quantiques font des machines qui simulent, optimisent et cassent les codes. Ce sont des voisins, pas des concurrents, et le premier usage commercial du quantique dans un atelier d'IA sera un coprocesseur spécialisé à côté des GPU."), tags:["quantum"]},
+ {q:B("Why is the physical layer gas-fired? Isn't that a problem?","Pourquoi la couche physique est-elle au gaz? N'est-ce pas un problème?"),
+  a:B("Gas is what makes Saskatchewan viable at 1.2 GW on the timeline announced, and it will be the political attack line. The honest position: the sovereignty argument does not depend on the fuel, and Quebec and Manitoba hydro can carry later phases. Treat it as a known cost, not a hidden one.","Le gaz rend la Saskatchewan viable à 1,2 GW dans l'échéancier annoncé, et ce sera l'angle d'attaque politique. La position honnête : l'argument de souveraineté ne dépend pas du combustible, et l'hydroélectricité du Québec et du Manitoba peut porter les phases suivantes. Un coût connu, pas un coût caché."), tags:["physical"]},
+ {q:B("What is the weakest claim on this page?","Quelle est l'affirmation la plus fragile de cette page?"),
+  a:B("The “Together” column. Almost every verdict in it is not started or gated. The complementarity is real, but nobody has signed anything, and Europe's own sovereignty rules could exclude Canada by default. The chart shows a possible future, not a current state. That is exactly why it is here for review.","La colonne « Ensemble ». Presque tous ses verdicts sont non commencés ou bloqués. La complémentarité est réelle, mais personne n'a rien signé, et les propres règles de souveraineté de l'Europe pourraient exclure le Canada par défaut. Le tableau montre un avenir possible, pas un état actuel. C'est précisément pourquoi il est ici pour révision."), tags:["base"]}
+];
+
+const TOUR=[
+ {focus:"physical",cam:"row",h:B("Start at the bottom","Commencer par le bas"),p:B("The law follows the building. Bell's 1.2 GW in Saskatchewan is Canadian land, power, fibre and staff, so Canadian courts decide who can reach the data. Only 300 MW is under construction; the rest waits for customers.","La loi suit le bâtiment. Les 1,2 GW de Bell en Saskatchewan sont du terrain, de l'énergie, de la fibre et du personnel canadiens : ce sont donc les tribunaux canadiens qui décident qui peut atteindre les données. Seuls 300 MW sont en construction; le reste attend des clients.")},
+ {focus:"silicon",cam:"row",h:B("The one red row","La seule rangée rouge"),p:B("Nobody outside the US and Taiwan makes the chips. Europe has the same gap. But a chip in Regina under a Canadian operator is still out of reach of a US subpoena: you buy the tool, you don't rent the landlord.","Personne hors des États-Unis et de Taïwan ne fabrique les puces. L'Europe a le même trou. Mais une puce à Regina sous un exploitant canadien échappe quand même à une assignation américaine : on achète l'outil, on ne loue pas le propriétaire.")},
+ {focus:"quantum",cam:"row",h:B("Where Canada leads","Où le Canada mène"),p:B("Four quantum unicorns, three still headquartered here. It doesn't replace GPUs; it simulates molecules, optimizes combinations and breaks encryption. For once Canada is the senior partner — and the HQ clause in the 2025 Champions Program exists because D-Wave left for Palo Alto.","Quatre licornes quantiques, trois toujours établies ici. Ça ne remplace pas les GPU : ça simule des molécules, optimise des combinaisons et casse le chiffrement. Pour une fois, le Canada est le partenaire principal — et la clause de siège social du programme des champions de 2025 existe parce que D-Wave est partie pour Palo Alto.")},
+ {focus:"platform",cam:"row",h:B("The layer hyperscalers actually sell","La couche que vendent vraiment les hyperscalers"),p:B("Databases, identity, storage, orchestration. Canada has no sovereign cloud at scale; Europe has ten years of them. Licence it, don't rebuild it. This is where the partnership pays Canada back.","Bases de données, identité, stockage, orchestration. Le Canada n'a pas de nuage souverain à grande échelle; l'Europe en a dix ans. Prendre sous licence, pas rebâtir. C'est ici que le partenariat rend la pareille au Canada.")},
+ {focus:"model",cam:"row",h:B("The algorithm","L'algorithme"),p:B("Cohere alone is sovereign but sub-frontier. Cohere plus Mistral plus Aleph Alpha, trained on Canadian power with weights co-owned, is a non-US bloc with real scale. Nothing has been signed.","Cohere seul est souverain mais sous la frontière. Cohere plus Mistral plus Aleph Alpha, entraînés sur l'énergie canadienne avec des poids codétenus, forment un bloc non américain d'échelle réelle. Rien n'a été signé.")},
+ {focus:"tog",cam:"col",h:B("Read the Together column","Lire la colonne Ensemble"),p:B("Four of five layers turn green. Then read the timing lines: almost all of it is not started or gated. The complementarity is real; the signatures are not.","Quatre couches sur cinq passent au vert. Puis lisez les lignes d'échéancier : presque tout est non commencé ou bloqué. La complémentarité est réelle; les signatures, non.")},
+ {focus:"base",cam:"base",h:B("One clause unlocks two layers","Une clause déverrouille deux couches"),p:B("Canada already holds EU data adequacy. What's missing is recognition under the EU Cloud & AI Development Act — the clause that “associate member” would mean in practice — and a post-quantum standard so sovereignty doesn't expire in the 2030s.","Le Canada détient déjà l'adéquation de l'UE. Il manque la reconnaissance sous la loi européenne sur le nuage et l'IA — la clause que « membre associé » voudrait dire en pratique — et une norme post-quantique pour que la souveraineté n'expire pas dans les années 2030.")}
+];
+
+// ---------- build world ----------
+const COLX={ca:300,eu:568,tog:860};
+const world=document.getElementById("world");
+function buildWorld(){
+  world.innerHTML="";
+  const band=document.createElement("div"); band.className="togband"; world.appendChild(band);
+  for(const [k,x] of Object.entries(COLX)){ const h=document.createElement("div"); h.className="colhead"+(k==="tog"?" tog":""); h.style.left=x+"px"; h.textContent=UI[LANG]["col_"+k]; world.appendChild(h); }
+  LAYERS.forEach((L,i)=>{
+    const c=document.createElement("button"); c.className="cell enter "+L.c; c.style.top=L.y+"px"; c.style.animationDelay=(i*.08)+"s"; c.dataset.id=L.id; c.type="button";
+    c.innerHTML=`<span class="tag">${LANG==="fr"?"Couche":"Layer"} ${L.n}</span><span class="t">${T(L.t)}</span><span class="s">${T(L.s)}</span>`;
+    c.onclick=()=>openLayer(L.id,"what"); world.appendChild(c);
+    for(const k of ["ca","eu","tog"]){
+      const v=L[k]; const w=document.createElement("div"); w.className="pillwrap enter"; w.style.left=COLX[k]+"px"; w.style.top=(L.y+10)+"px"; w.style.animationDelay=(i*.08+.1)+"s"; w.dataset.col=k; w.dataset.id=L.id;
+      const p=document.createElement("button"); p.type="button"; p.className="pill "+v.c; p.innerHTML=`${sym(v.c)} ${T(UI[LANG].v[v.v])}`;
+      p.onclick=(e)=>openPop(e,L,k); w.appendChild(p);
+      const t=document.createElement("div"); t.className="timing "+v.tm; t.innerHTML=`<span class="g"></span>${UI[LANG].tm[v.tm]}${v.tm==="gated"&&v.gate?" — "+shortGate(L,k):""}`; w.appendChild(t);
+      const d=document.createElement("div"); d.className="short"; d.textContent=T(v.short); w.appendChild(d);
+      world.appendChild(w);
+    }
+  });
+  const b=document.createElement("button"); b.type="button"; b.className="base enter"; b.style.animationDelay=".5s"; b.innerHTML=`<b>${T(BASE.t)}</b><span>${T(BASE.s)}</span>`; b.onclick=()=>openBase(); world.appendChild(b);
+}
+function sym(c){return {ok:"●",warn:"▲",part:"◆",bad:"✕"}[c];}
+function shortGate(L,k){ return {en:{platform:"CADA + licence",physical:"CADA + offtake"},fr:{platform:"CADA + licence",physical:"CADA + contrats"}}[LANG][L.id]||""; }
+
+// ---------- camera ----------
+const vp=document.getElementById("viewport"); const W=1240,H=820;
+let cam={x:0,y:0,s:1};
+function fit(){ const r=vp.getBoundingClientRect(); const s=Math.min(r.width/W,r.height/H); cam={x:(r.width-W*s)/2,y:(r.height-H*s)/2,s}; apply(); }
+function apply(){ world.style.transform=`translate(${cam.x}px,${cam.y}px) scale(${cam.s})`; }
+function zoomTo(x,y,w,h,pad=40){ const r=vp.getBoundingClientRect(); const s=Math.min((r.width-pad*2)/w,(r.height-pad*2)/h,2.2); cam={x:(r.width-w*s)/2-x*s,y:(r.height-h*s)/2-y*s,s}; apply(); }
+window.addEventListener("resize",()=>{ if(!document.getElementById("stage").hidden||tourOn) return; fit(); });
+document.addEventListener("mousemove",e=>{ document.getElementById("spot").style.setProperty("--mx",e.clientX+"px"); document.getElementById("spot").style.setProperty("--my",e.clientY+"px"); });
+
+// ---------- pill popover ----------
+const pop=document.getElementById("pop");
+function openPop(e,L,k){
+  e.stopPropagation(); const v=L[k];
+  pop.innerHTML=`<div class="ph"><span class="sw" style="background:${COLORS[v.c]}"></span><h4>${T(L.t)} · ${UI[LANG]["col_"+k]}</h4><button class="x" type="button" aria-label="${UI[LANG].close}" onclick="closePop()">×</button></div>
+    <p><b>${T(UI[LANG].v[v.v])}.</b> ${T(v.why)}</p>
+    <div class="tm">${sym(v.c)} ${UI[LANG].tm[v.tm]} — ${UI[LANG].tmlong[v.tm]}</div>
+    ${v.gate?`<p style="margin-top:8px"><b>${UI[LANG].tm.gated}:</b> ${T(v.gate)}</p>`:""}
+    <div class="more"><button type="button" onclick="closePop();openLayer('${L.id}','${k}')">${UI[LANG].open_layer} →</button></div>`;
+  pop.hidden=false;
+  const r=vp.getBoundingClientRect(); const b=e.currentTarget.getBoundingClientRect();
+  let left=b.left-r.left, top=b.bottom-r.top+8; const pw=Math.min(380,r.width-24);
+  if(left+pw>r.width-12) left=r.width-12-pw; if(left<12) left=12;
+  pop.style.left=left+"px"; pop.style.top=top+"px";
+  requestAnimationFrame(()=>{ const ph=pop.offsetHeight; if(top+ph>r.height-8) pop.style.top=Math.max(8,b.top-r.top-ph-8)+"px"; });
+}
+function closePop(){ pop.hidden=true; }
+vp.addEventListener("click",e=>{ if(!pop.hidden&&!pop.contains(e.target)) closePop(); });
+
+// ---------- stage (layer) ----------
+const stage=document.getElementById("stage"); let cur=null;
+function openLayer(id,facet){
+  closePop(); const L=LAYERS.find(l=>l.id===id); cur={id,facet};
+  const el=world.querySelector(`.cell[data-id="${id}"]`); zoomTo(0,L.y-20,1108,150,60); world.classList.add("away");
+  renderStage(L,facet); stage.hidden=false; crumbs(T(L.t));
+}
+function renderStage(L,facet){
+  const F=UI[LANG].facets; const tabs=["what","ca","eu","tog","gate"];
+  const dot=(k)=>k==="what"||k==="gate"?"":`<i class="dot" style="background:${COLORS[L[k].c]}"></i>`;
+  let body="";
+  if(facet==="what"){ body=`<p class="lead">${T(L.what[0])}</p><p>${T(L.what[1])}</p>
+    <div class="verdictrow">${["ca","eu","tog"].map(k=>`<div class="vchip"><small>${UI[LANG]["col_"+k]}</small><b><i style="background:${COLORS[L[k].c]}"></i>${T(UI[LANG].v[L[k].v])}</b><span class="tm">${sym(L[k].c)} ${UI[LANG].tm[L[k].tm]}</span></div>`).join("")}</div>
+    <div class="note gold"><b>${LANG==="fr"?"Qui apporte quoi":"Who brings what"}</b>${T(L.brings)}</div>`; }
+  else if(facet==="gate"){ body=`<h3>${F.gate}</h3>`+["ca","eu","tog"].map(k=>`<div class="vchip" style="margin-bottom:10px;max-width:720px"><small>${UI[LANG]["col_"+k]}</small><b><i style="background:${COLORS[L[k].c]}"></i>${T(UI[LANG].v[L[k].v])} · ${UI[LANG].tm[L[k].tm]}</b><p style="margin:6px 0 0">${UI[LANG].tmlong[L[k].tm]}.${L[k].gate?" "+T(L[k].gate):""}</p></div>`).join(""); }
+  else { const v=L[facet]; body=`<div class="verdictrow"><div class="vchip" style="flex:0 1 320px"><small>${UI[LANG]["col_"+facet]}</small><b><i style="background:${COLORS[v.c]}"></i>${T(UI[LANG].v[v.v])}</b><span class="tm">${sym(v.c)} ${UI[LANG].tm[v.tm]} — ${UI[LANG].tmlong[v.tm]}</span></div></div><p class="lead">${T(v.why)}</p>${v.gate?`<div class="note gold"><b>${UI[LANG].tm.gated}</b>${T(v.gate)}</div>`:""}`; }
+  stage.innerHTML=`<div class="shead"><div><p class="tag">${LANG==="fr"?"Couche":"Layer"} ${L.n}</p><h2>${T(L.t)}</h2><p class="k">${T(L.s)}</p></div>
+    <div class="sactions"><button class="ibtn round" type="button" aria-label="${UI[LANG].close}" onclick="closeStage()">×</button></div></div>
+    <div class="tabs">${tabs.map(k=>`<button class="tab" type="button" aria-current="${k===facet}" onclick="renderStage(LAYERS.find(l=>l.id==='${L.id}'),'${k}')">${dot(k)}${F[k]}</button>`).join("")}</div>
+    <div class="dcontent">${body}</div>`;
+  if(cur) cur.facet=facet;
+}
+function openBase(){ closePop(); cur={id:"base"}; zoomTo(0,730,1108,80,60); world.classList.add("away");
+  stage.innerHTML=`<div class="shead"><div><p class="tag">${LANG==="fr"?"Fondation":"Foundation"}</p><h2>${T(BASE.t)}</h2></div><div class="sactions"><button class="ibtn round" type="button" aria-label="${UI[LANG].close}" onclick="closeStage()">×</button></div></div>
+    <div class="dcontent"><p class="lead">${T(BASE.body[0])}</p><p>${T(BASE.body[1])}</p><div class="note gold"><b>${LANG==="fr"?"Deuxième condition":"Second condition"}</b>${T(BASE.body[2])}</div></div>`;
+  stage.hidden=false; crumbs(T(BASE.t)); }
+function closeStage(){ stage.hidden=true; cur=null; world.classList.remove("away"); fit(); crumbs(); }
+
+// ---------- Q&A ----------
+const qa=document.getElementById("qa"); let qaOpen=false, qaFilter="all", qaQuery="";
+function toggleQA(){ qaOpen=!qaOpen; if(qaOpen){ if(tourOn) toggleTour(); closePop(); renderQA(); } qa.hidden=!qaOpen; document.getElementById("qabtn").classList.toggle("on",qaOpen); }
+function renderQA(){
+  const tags=[["all",UI[LANG].qa_all],...LAYERS.map(l=>[l.id,T(l.t)]),["base",LANG==="fr"?"Juridiction":"Jurisdiction"]];
+  const list=QA.filter(q=>(qaFilter==="all"||q.tags.includes(qaFilter))&&(!qaQuery||(T(q.q)+" "+T(q.a)).toLowerCase().includes(qaQuery)));
+  qa.innerHTML=`<div class="qahead"><div><h2>${UI[LANG].qa_title}</h2><p>${UI[LANG].qa_sub}</p></div><div class="sactions"><button class="ibtn round" type="button" aria-label="${UI[LANG].close}" onclick="toggleQA()">×</button></div></div>
+   <div class="contrib">${UI[LANG].contrib}</div>
+   <div class="qatools"><input id="qasearch" type="search" placeholder="${UI[LANG].qa_search}" value="${qaQuery}" oninput="qaQuery=this.value.toLowerCase();renderQA();document.getElementById('qasearch').focus();document.getElementById('qasearch').setSelectionRange(99,99)"></div>
+   <div class="chips">${tags.map(([k,l])=>`<button class="chip" type="button" aria-pressed="${k===qaFilter}" onclick="qaFilter='${k}';renderQA()">${l}</button>`).join("")}</div>
+   <div class="qalist">${list.length?list.map((q,i)=>`<div class="qi" id="qi${i}"><button class="qq" type="button" onclick="this.parentElement.classList.toggle('open')"><span class="who">${q.tags.map(t=>t==="base"?(LANG==="fr"?"juridiction":"jurisdiction"):t).join(" · ")}</span><span class="txt">${T(q.q)}</span><span class="car">▶</span></button><div class="qa-a"><p>${T(q.a)}</p></div></div>`).join(""):`<div class="qaempty">${UI[LANG].qa_none}</div>`}</div>`;
+}
+
+// ---------- tour ----------
+let tourOn=false, ti=0; const cap=document.getElementById("caption");
+function toggleTour(){ tourOn=!tourOn; document.getElementById("tourbtn").classList.toggle("on",tourOn); document.getElementById("tourlbl").textContent=tourOn?UI[LANG].tour_exit:UI[LANG].tour;
+  if(tourOn){ if(qaOpen) toggleQA(); closeStage(); closePop(); ti=0; world.classList.add("tour"); showStep(); } else { world.classList.remove("tour"); world.querySelectorAll(".focus").forEach(e=>e.classList.remove("focus")); cap.classList.remove("show"); fit(); } }
+function showStep(){
+  const s=TOUR[ti]; world.querySelectorAll(".focus").forEach(e=>e.classList.remove("focus"));
+  if(s.cam==="row"){ const L=LAYERS.find(l=>l.id===s.focus); zoomTo(0,L.y-30,1108,180,50); world.querySelector(`.cell[data-id="${s.focus}"]`).classList.add("focus"); world.querySelectorAll(`.pillwrap[data-id="${s.focus}"]`).forEach(e=>e.classList.add("focus")); }
+  else if(s.cam==="col"){ zoomTo(830,0,300,740,40); world.querySelectorAll(`.pillwrap[data-col="tog"]`).forEach(e=>e.classList.add("focus")); }
+  else { zoomTo(0,700,1108,120,60); world.querySelector(".base").classList.add("focus"); }
+  const U=UI[LANG]; const last=ti===TOUR.length-1;
+  cap.innerHTML=`<div class="cbody"><div class="ctop"><span class="step">${U.step} ${ti+1} ${U.of} ${TOUR.length}</span><div class="dots">${TOUR.map((_,i)=>`<i class="${i<ti?"done":i===ti?"cur":""}" onclick="ti=${i};showStep()"></i>`).join("")}</div></div>
+   <h3>${T(s.h)}</h3><p>${T(s.p)}</p>
+   <div class="cbar"><button class="ibtn" type="button" onclick="ti=Math.max(0,ti-1);showStep()" ${ti===0?"disabled":""}>‹ <span class="lbl">${U.prev}</span></button>
+   <button class="ibtn primary" type="button" onclick="${last?"toggleTour()":"ti++;showStep()"}"><span class="lbl">${last?U.finish:U.next}</span> ›</button>
+   ${s.cam==="row"?`<button class="ibtn" type="button" style="margin-left:auto" onclick="toggleTour();openLayer('${s.focus}','what')">${U.explore}</button>`:s.cam==="base"?`<button class="ibtn" type="button" style="margin-left:auto" onclick="toggleTour();openBase()">${U.explore}</button>`:""}</div></div>`;
+  cap.classList.add("show");
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if(!pop.hidden) closePop(); else if(qaOpen) toggleQA(); else if(tourOn) toggleTour(); else if(!stage.hidden) closeStage(); } if(tourOn&&e.key==="ArrowRight"&&ti<TOUR.length-1){ti++;showStep();} if(tourOn&&e.key==="ArrowLeft"&&ti>0){ti--;showStep();} });
+
+// ---------- chrome ----------
+function crumbs(curName){ const c=document.getElementById("crumbs"); c.innerHTML=curName?`<button type="button" onclick="closeStage()">${UI[LANG].home}</button><span class="sep">›</span><span class="cur">${curName}</span>`:`<span class="cur">${UI[LANG].home}</span>`; }
+function setLang(l){ LANG=l; try{localStorage.setItem("ss-lang",l);}catch(e){} document.getElementById("lang-en").setAttribute("aria-pressed",l==="en"); document.getElementById("lang-fr").setAttribute("aria-pressed",l==="fr"); document.documentElement.lang=l;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=UI[l][el.dataset.i18n]);
+  document.getElementById("qalbl").textContent=UI[l].qa; document.getElementById("tourlbl").textContent=tourOn?UI[l].tour_exit:UI[l].tour;
+  document.getElementById("legend").innerHTML=Object.entries(UI[l].leg).map(([k,v])=>`<span><i style="background:${COLORS[k]}"></i>${v}</span>`).join("");
+  buildWorld(); if(cur){ if(cur.id==="base") openBase(); else renderStage(LAYERS.find(x=>x.id===cur.id),cur.facet); crumbs(cur.id==="base"?T(BASE.t):T(LAYERS.find(x=>x.id===cur.id).t)); } else crumbs();
+  if(qaOpen) renderQA(); if(tourOn) showStep(); closePop(); }
+function renderCredit(){
+  const withT=LANG==="fr"?"avec Claude (Anthropic)":"with Claude (Anthropic)";
+  const links=[AUTHOR.linkedin&&`<a href="${AUTHOR.linkedin}" target="_blank" rel="noopener">LinkedIn</a>`,AUTHOR.instagram&&`<a href="${AUTHOR.instagram}" target="_blank" rel="noopener">Instagram</a>`,AUTHOR.web&&`<a href="${AUTHOR.web}" target="_blank" rel="noopener">${AUTHOR.web.replace(/^https?:\/\//,"")}</a>`].filter(Boolean).join("");
+  document.getElementById("byline").innerHTML=`<span><b>${AUTHOR.name}</b> <span class="with">· ${withT}</span></span>${links}`;
+  document.getElementById("credit").innerHTML=(LANG==="fr"?"© 2026 ":"© 2026 ")+AUTHOR.name+(LANG==="fr"?" · Brouillon pour révision — partagez avec la mention de l'auteur.":" · Draft for review — share with attribution.");
+}
+const _sl=setLang; setLang=function(l){ _sl(l); renderCredit(); };
+setLang(LANG); fit();
+</script>
+
+</body>
+</html>
