@@ -50,6 +50,8 @@ window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.r
     <th>Name</th><th>Email</th><th>Organization</th><th>Lang</th><th>Consent</th><th style="text-align:right">Visits</th><th>First seen</th><th>Last seen</th><th>Came from</th>
   </tr></thead><tbody id="rows"></tbody></table></div>
   <div class="msg" id="msg">Enter your admin key to load the list.</div>
+  <h1 style="font-size:22px;margin:28px 0 4px" id="ch" hidden>Comments</h1>
+  <div class="tblwrap" id="cwrap" hidden><table><thead><tr><th>When</th><th>Who</th><th>About</th><th>Comment</th></tr></thead><tbody id="crows"></tbody></table></div>
 </div>
 <script>
 let DATA=[]; let KEY="";
@@ -64,9 +66,15 @@ async function load(){
     if(!j.ok){ $("msg").textContent=r.status===401?"Wrong key.":(j.error||"Error"); return; }
     try{ sessionStorage.setItem("ss-admin",KEY); }catch(e){}
     DATA=j.visitors; $("stats").hidden=false; $("tblwrap").hidden=false; $("csv").disabled=$("refresh").disabled=$("q").disabled=false;
-    $("stats").innerHTML=`<div><b>${j.totals.visitors}</b><small>registered</small></div><div><b>${j.totals.visits}</b><small>total visits</small></div><div><b>${j.totals.new_7d}</b><small>new in 7 days</small></div><div><b>${DATA.filter(v=>v.lang==="fr").length}</b><small>reading in French</small></div>`;
+    $("stats").innerHTML=`<div><b>${j.totals.visitors}</b><small>registered</small></div><div><b>${j.totals.visits}</b><small>total visits</small></div><div><b>${j.totals.new_7d}</b><small>new in 7 days</small></div><div><b>${DATA.filter(v=>v.lang==="fr").length}</b><small>reading in French</small></div><div><b>${j.totals.comments}</b><small>comments</small></div>`;
+    renderComments(j.comments||[]);
     render();
   }catch(e){ $("msg").textContent="Could not reach the server: "+e.message; }
+}
+function renderComments(cs){
+  const esc=(s)=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  $("ch").hidden=$("cwrap").hidden=false;
+  $("crows").innerHTML=cs.length?cs.map(c=>`<tr><td style="white-space:nowrap">${fmt(c.created_at)}</td><td>${esc(c.name)}<br><a href="mailto:${esc(c.email)}" style="color:var(--gold-2)">${esc(c.email)}</a>${c.organization?"<br><span style=color:var(--dim)>"+esc(c.organization)+"</span>":""}</td><td><span class="pill">${esc(c.about||"model")}</span></td><td style="white-space:pre-wrap;max-width:520px">${esc(c.text)}</td></tr>`).join(""):`<tr><td colspan="4" style="color:var(--muted)">No comments yet.</td></tr>`;
 }
 function render(){
   const q=$("q").value.trim().toLowerCase();

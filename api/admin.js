@@ -1,6 +1,7 @@
 // GET /api/admin            -> visitors list (header x-admin-key or ?key=)
 // GET /api/admin?format=csv -> CSV download
 const { ensureSchema, json } = require('./_db');
+const { ensureComments } = require('./comment');
 
 module.exports = async (req, res) => {
   try {
@@ -10,6 +11,10 @@ module.exports = async (req, res) => {
     if (key !== process.env.ADMIN_KEY) return json(res, 401, { error: 'unauthorized' });
 
     const q = await ensureSchema();
+    await ensureComments(q);
+    const comments = await q`
+      SELECT c.id, c.about, c.text, c.lang, c.created_at, v.name, v.email, v.organization
+      FROM comments c JOIN visitors v ON v.id = c.visitor_id ORDER BY c.created_at DESC LIMIT 5000`;
     const rows = await q`
       SELECT id, name, email, organization, lang, consent, visits, created_at, last_seen, referrer
       FROM visitors ORDER BY last_seen DESC LIMIT 5000`;
@@ -25,7 +30,7 @@ module.exports = async (req, res) => {
       res.setHeader('Content-Disposition', 'attachment; filename="ai-sovereign-stack-visitors.csv"');
       return res.end('﻿' + csv);
     }
-    return json(res, 200, { ok: true, totals: totals[0], visitors: rows });
+    return json(res, 200, { ok: true, totals: { ...totals[0], comments: comments.length }, visitors: rows, comments });
   } catch (e) {
     console.error(e);
     return json(res, 500, { error: 'server', detail: String(e.message || e) });

@@ -26,6 +26,8 @@
   .gcard .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .gcard .err{color:#F5A3A3;font-size:13px;margin-left:auto}
   .gcard .lang{margin-left:auto}
+  .gcard textarea:focus,.gcard select:focus{border-color:var(--gold-2);outline:none}
+  .gcard .ok{color:var(--teal-2);font-size:13px;margin-left:auto}
   @media (max-width:520px){ .gcard .row{grid-template-columns:1fr} .gcard{padding:20px 18px 18px} }
 </style>
 <script>
@@ -216,6 +218,23 @@ window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.r
   @media (prefers-reduced-motion:reduce){ .world,.stage,.cell,.pill,.caption,.pop{transition:none;animation:none} .cell.enter,.pillwrap.enter,.base.enter,.caption .cbody,.dcontent{animation:none} }
 </style>
 
+
+<div class="gate" id="cmodal" hidden>
+  <form class="gcard" id="cform" onsubmit="return submitComment(event)">
+    <p class="eyebrow" id="c_eyebrow"></p>
+    <h2 id="c_title"></h2>
+    <p id="c_sub"></p>
+    <label for="c_about" id="c_labout"></label>
+    <select id="c_about" style="width:100%;box-sizing:border-box;height:42px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ivory);padding:0 12px;font:15px var(--body);margin-bottom:12px"></select>
+    <label for="c_text" id="c_ltext"></label>
+    <textarea id="c_text" rows="6" required minlength="3" style="width:100%;box-sizing:border-box;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ivory);padding:10px 14px;font:15px var(--body);resize:vertical;margin-bottom:12px"></textarea>
+    <div class="actions">
+      <button class="tourbtn" type="submit" id="c_btn"></button>
+      <button class="ibtn" type="button" onclick="closeComment()" id="c_cancel"></button>
+      <span class="err" id="c_err"></span>
+    </div>
+  </form>
+</div>
 <div class="gate" id="gate" hidden>
   <form class="gcard" id="gform" onsubmit="return submitGate(event)">
     <p class="eyebrow" id="g_eyebrow"></p>
@@ -247,6 +266,7 @@ window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.r
       <p class="byline" id="byline"></p>
     </div>
     <div class="controls">
+      <button class="ibtn" id="cmbtn" type="button" onclick="openComment()"><span id="cmlbl"></span></button>
       <button class="ibtn" id="qabtn" type="button" onclick="toggleQA()"><span id="qalbl"></span></button>
       <button class="tourbtn" id="tourbtn" type="button" onclick="toggleTour()"><span>▶</span><span id="tourlbl"></span></button>
       <div class="lang" role="group" aria-label="Language">
@@ -276,7 +296,7 @@ window.onunhandledrejection=function(ev){ window.onerror(String((ev.reason&&ev.r
 const UI = {
  en:{eyebrow:"Canada + EU · what an alliance could look like as an associate member", title:"AI Sovereign Stack", tagline:"Where Canada can own its data and its algorithms without becoming a hyperscaler, and what changes if Canada joins Europe's digital space as an associate member. Click a layer to fly in; click any verdict for the reason behind it. Comments welcome: this is a draft for review.",
      home:"The stack", back:"Back", close:"Close", tour:"Guided tour", tour_exit:"Exit tour", qa:"Q&A", qa_title:"Questions & answers", qa_sub:"The questions this model has been asked so far, with the answers as they stand. Add yours in the comments and I will fold the good ones in.",
-     qa_search:"Search questions…", qa_all:"All", qa_none:"No question matches.", contrib:"How to improve this — use the comment tool on this page to challenge a verdict, add a source, or propose a missing layer. Every verdict here is a claim, not a fact.",
+     qa_search:"Search questions…", qa_all:"All", qa_none:"No question matches.", contrib:"How to improve this — use the Comment button at the top to challenge a verdict, add a source, or propose a missing layer. Every verdict here is a claim, not a fact.",
      col_ca:"Canada alone", col_eu:"Europe alone", col_tog:"Together (associate member)", leg:{ok:"Sovereign",warn:"Achievable / constrained",part:"Partial",bad:"Not sovereign"},
      tm:{now:"Now",prog:"In progress",none:"Not started",gated:"Gated"}, tmlong:{now:"Operating today",prog:"Under way, not finished",none:"Nothing started yet",gated:"Blocked until a named decision is made"},
      v:{ok:"Sovereign",warn:"Achievable",cons:"Constrained",part:"Partial, 2030s",bad:"Not sovereign",lead:"Sovereign — leads",plus:"Sovereign +",supply:"Canada supplies EU"},
@@ -284,7 +304,7 @@ const UI = {
      step:"Step", of:"of", prev:"Previous", next:"Next", finish:"Finish", explore:"Explore this layer", open_layer:"Open the full layer"},
  fr:{eyebrow:"Canada + UE · à quoi ressemblerait une alliance comme membre associé", title:"Pile souveraine IA", tagline:"Où le Canada peut posséder ses données et ses algorithmes sans devenir un hyperscaler, et ce qui change si le Canada rejoint l'espace numérique européen comme membre associé. Cliquez sur une couche pour y plonger; cliquez sur un verdict pour en voir la raison. Vos commentaires sont bienvenus : c'est un brouillon à réviser.",
      home:"La pile", back:"Retour", close:"Fermer", tour:"Visite guidée", tour_exit:"Quitter la visite", qa:"Q&R", qa_title:"Questions et réponses", qa_sub:"Les questions posées jusqu'ici sur ce modèle, avec les réponses telles qu'elles se tiennent. Ajoutez les vôtres en commentaire et j'intégrerai les meilleures.",
-     qa_search:"Chercher une question…", qa_all:"Toutes", qa_none:"Aucune question ne correspond.", contrib:"Pour améliorer ceci — utilisez l'outil de commentaires de la page pour contester un verdict, ajouter une source ou proposer une couche manquante. Chaque verdict ici est une affirmation, pas un fait.",
+     qa_search:"Chercher une question…", qa_all:"Toutes", qa_none:"Aucune question ne correspond.", contrib:"Pour améliorer ceci — utilisez le bouton Commenter en haut de page pour contester un verdict, ajouter une source ou proposer une couche manquante. Chaque verdict ici est une affirmation, pas un fait.",
      col_ca:"Canada seul", col_eu:"Europe seule", col_tog:"Ensemble (membre associé)", leg:{ok:"Souverain",warn:"Atteignable / contraint",part:"Partiel",bad:"Non souverain"},
      tm:{now:"Maintenant",prog:"En cours",none:"Pas commencé",gated:"Bloqué"}, tmlong:{now:"En exploitation aujourd'hui",prog:"En cours, pas terminé",none:"Rien de commencé",gated:"Bloqué jusqu'à une décision précise"},
      v:{ok:"Souverain",warn:"Atteignable",cons:"Contraint",part:"Partiel, années 2030",bad:"Non souverain",lead:"Souverain — en tête",plus:"Souverain +",supply:"Le Canada fournit l'UE"},
@@ -536,6 +556,31 @@ async function submitGate(e){
   return false;
 }
 initGate();
+
+// ---------- comments ----------
+const CM_UI={
+ en:{btn:"Comment",eyebrow:"Your review",title:"Challenge a verdict, add a source, propose a layer",sub:"Comments go straight to the author and are folded into the next version. Every verdict on this page is a claim, not a fact.",about:"About",general:"The whole model",text:"Your comment",send:"Send",cancel:"Cancel",sent:"Sent — thank you.",err_reg:"Please register first (reload the page).",err_net:"Could not send right now. Try again."},
+ fr:{btn:"Commenter",eyebrow:"Votre révision",title:"Contestez un verdict, ajoutez une source, proposez une couche",sub:"Les commentaires vont directement à l'auteur et sont intégrés à la prochaine version. Chaque verdict de cette page est une affirmation, pas un fait.",about:"À propos de",general:"Le modèle entier",text:"Votre commentaire",send:"Envoyer",cancel:"Annuler",sent:"Envoyé — merci.",err_reg:"Veuillez d'abord vous inscrire (rechargez la page).",err_net:"Impossible d'envoyer pour l'instant. Réessayez."}
+};
+function cmText(){ const C=CM_UI[LANG]; for(const [id,k] of [["cmlbl","btn"],["c_eyebrow","eyebrow"],["c_title","title"],["c_sub","sub"],["c_labout","about"],["c_ltext","text"],["c_btn","send"],["c_cancel","cancel"]]){ const el=document.getElementById(id); if(el) el.textContent=C[k]; }
+  const sel=document.getElementById("c_about"); if(sel){ const cur=sel.value; sel.innerHTML=`<option value="">${C.general}</option>`+LAYERS.map(l=>`<option value="${l.id}">${l.n} · ${T(l.t)}</option>`).join("")+`<option value="base">0 · ${T(BASE.t)}</option>`; sel.value=cur; } }
+const _setLang2=setLang; setLang=function(l){ _setLang2(l); cmText(); };
+function openComment(){ closePop(); cmText(); if(cur&&cur.id) document.getElementById("c_about").value=cur.id; document.getElementById("c_err").textContent=""; document.getElementById("c_err").className="err"; document.getElementById("cmodal").hidden=false; setTimeout(()=>document.getElementById("c_text").focus(),300); }
+function closeComment(){ document.getElementById("cmodal").hidden=true; }
+async function submitComment(e){
+  e.preventDefault(); const C=CM_UI[LANG]; const err=document.getElementById("c_err"); err.textContent=""; err.className="err";
+  let token=null; try{ token=localStorage.getItem("ss-token"); }catch(x){}
+  if(!token){ err.textContent=C.err_reg; return false; }
+  const text=document.getElementById("c_text").value.trim(), about=document.getElementById("c_about").value;
+  const btn=document.getElementById("c_btn"); btn.disabled=true;
+  try{ const r=await fetch("/api/comment",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token,text,about,lang:LANG})}); const j=await r.json();
+    if(!j.ok) throw new Error(j.error||"x");
+    document.getElementById("c_text").value=""; err.className="ok"; err.textContent=C.sent; setTimeout(closeComment,1200);
+  }catch(ex){ err.textContent=(ex.message==="register")?C.err_reg:C.err_net; } finally{ btn.disabled=false; }
+  return false;
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!document.getElementById("cmodal").hidden) closeComment(); });
+cmText();
 </script>
 
 </body>
